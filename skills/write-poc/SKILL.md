@@ -44,26 +44,23 @@ Select the minimal demonstration that proves the vulnerability exists and convey
 Follow the principle of **minimum viable proof** — demonstrate the issue without going beyond
 what is necessary.
 
+Primary PoC approaches:
+* Test Case (preferred)
+* Python Script
+
 **Test Case Proof of Concepts**
 
 Analyze whether it is possible to write the proof of concept as a test case to extend an existing test suite. Determine the best place to put the proof of concept code if that's the case. Then ask the user i they would like to extend the test suite and if this location is correct.
 
-**Approach selection guidelines:**
-
-| Scenario | Recommended Approach |
-|----------|---------------------|
-| Web endpoint vulnerability | HTTP request (curl/Python requests) |
-| Logic/auth flaw | Step-by-step request sequence |
-| Memory corruption | Minimal C/Python trigger + crash analysis |
-| Cryptographic weakness | Script demonstrating the mathematical flaw |
-| Configuration issue | Minimal config + demonstration of consequence |
-| Race condition | Concurrent request script with timing |
-| Supply chain / dependency | Dependency tree analysis + trigger |
-| Smart contract vulnerability | Fork test or unit test — ask the user (see `references/smart-contracts.md`) |
-
 When the target is a smart contract, ask the user whether to use a **fork test** (live on-chain
 state) or a **unit test** (self-contained, synthetic state) before proceeding. Consult
 **`references/smart-contracts.md`** for detailed templates, conventions, and vulnerability patterns.
+
+**Alternative Approaches**
+
+The preferred method (after test cases) is a single python script that leverages click and loguru.
+
+**Notes**
 
 When multiple approaches work, prefer the one that is **simplest to reproduce** for the
 maintainer receiving the report.
