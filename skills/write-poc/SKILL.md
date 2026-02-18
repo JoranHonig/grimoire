@@ -78,7 +78,9 @@ Primary PoC approaches:
 
 **Test Case Proof of Concepts**
 
-Analyze whether it is possible to write the proof of concept as a test case to extend an existing test suite. Determine the best place to put the proof of concept code if that's the case. Then ask the user i they would like to extend the test suite and if this location is correct.
+Analyze whether it is possible to write the proof of concept as a test case to extend an existing test suite.
+Determine the best place to put the proof of concept code if that's the case. Then ask the user if they would
+like to extend the test suite and if this location is correct.
 
 When the target is a smart contract, ask the user whether to use a **fork test** (live on-chain
 state) or a **unit test** (self-contained, synthetic state) before proceeding. Consult
@@ -93,22 +95,7 @@ The preferred method (after test cases) is a single python script that leverages
 When multiple approaches work, prefer the one that is **simplest to reproduce** for the
 maintainer receiving the report.
 
-### 4. Select Output Format
-
-Adapt the deliverable format to the vulnerability and audience:
-
-- **Standalone script** — Most common. A single `.py`, `.sh`, or `.rb` file that reproduces
-  the issue end-to-end. Best for: injection flaws, auth bypasses, race conditions.
-- **curl command(s)** — For simple HTTP-based issues where a script is overkill. Best for:
-  IDOR, open redirects, header injection, simple SSRF.
-- **Code snippet + explanation** — When the vulnerability is in source code and the PoC is
-  a specific input or configuration. Best for: logic bugs, crypto weaknesses, unsafe defaults.
-- **Multi-step reproduction** — Numbered steps mixing commands, code, and explanation. Best
-  for: complex chains, multi-stage attacks, privilege escalation paths.
-
-For detailed format guidance per vulnerability class, consult **`references/poc-formats.md`**.
-
-### 3. Write the PoC
+### 4. Write the PoC
 
 Structure every PoC with these elements:
 
@@ -148,18 +135,15 @@ This means natspec for solidity, javadoc for java, etc.
 
 Important: Never run the PoC against a production environment without asking the user!
 
-### 6. Review Before Delivery
+### 5. Review Before Delivery
 
 Before finalizing, verify:
 
 - [ ] No destructive payloads or actions
 - [ ] PoC actually demonstrates the vulnerability (not just a theoretical description)
-- [ ] Target is parameterized (not hardcoded to a live system)
 - [ ] Comments explain the exploit chain clearly
 - [ ] Output clearly indicates success or failure
-- [ ] Dependencies are documented
 - [ ] Reproduction steps are complete and ordered
-- [ ] Remediation suggestion is actionable
 
 ## Additional Resources
 
