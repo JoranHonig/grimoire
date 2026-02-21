@@ -5,8 +5,9 @@
 skills:
 * triage 
 * proof of concept   
-* context building 
+* identify
     * maybe this skill needs to be split up (e.g. there could be a skill for building architectural context)
+* context 
 * scoping 
 * flow
 * back-pressure and automation
@@ -18,6 +19,7 @@ skills:
 
 agents:
 * sigil     (general sub-agent)
+* sage      (back-pressure agent that double checks and gives a second opinion)
 * librarian (fetches external documentation where relevant)
 * imp       (reviews findings from external audits that might provide relevant information)
 
