@@ -26,3 +26,18 @@ A spellbook is a users own book of shadows where they keep their own spells and 
 The spellbook is a unique distillation of the learnings of any given user, and is supposed to be personal. That said, a team 
 of auditors (coven :) ) can opt to share learnings from their spellbooks.
 
+### Grimoire Summon
+
+As a researcher initializes grimoire on a new repository ( summon ) we should kick off some automations.
+
+We can easily kick off all the static analysis modules that a user has gathered over time, do an initial false positive 
+pass over them and then surface the issues to the user for review.
+
+The non-static analysis detectors might be a little bit more difficult. I don't necessarily want to kick off agents that 
+will consume lots of tokens for detector "skills" that don't necessarily result in many issues. These are things to be 
+kicked off at the discretion of the user. 
+
+It might be interesting to surface to the user that there is a set of agents / skills that might be interesting to fire off 
+based on the initial scoping / context building that was done by grimoire already.
+
+More on this in [[summon]].
