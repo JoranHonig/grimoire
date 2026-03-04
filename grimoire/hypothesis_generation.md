@@ -1,5 +1,3 @@
-# Hypothesis Generation 
-
 Grimoire is lazer focussed on providing leverage to the security researcher. 
 
 In the end this boils down to hypothesis generation and testing. It's a toolset that centers itself around
