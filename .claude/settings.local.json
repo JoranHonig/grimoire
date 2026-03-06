@@ -3,7 +3,20 @@
     "allow": [
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(wc -l /Users/walker/Development/grimoire/grimoire/skills/*.md)"
+      "Bash(wc -l /Users/walker/Development/grimoire/grimoire/skills/*.md)",
+      "Bash(wc -l /Users/walker/Development/grimoire/skills/write-poc/references/*.md | sort -n)",
+      "Bash(find /Users/walker/Development/grimoire/grimoire/skills -type f -name \"*.md\" | xargs basename -a | sort)",
+      "Bash(ls -la /Users/walker/Development/grimoire/grimoire/skills/sigils/codeql* 2>/dev/null)",
+      "Bash(for skill in write-poc summon cartography gc-cartography review-cartography)",
+      "Bash(do echo \"=== $skill ===\")",
+      "Read(//Users/walker/Development/grimoire/skills/**)",
+      "Bash(done)",
+      "Bash(find /Users/walker/Development/grimoire/grimoire/skills -type f -name \"*.md\" | xargs ls -lS)",
+      "Bash(find /Users/walker/Development/grimoire -type d -name \"*alchemy*\" -o -name \"*backpressure*\" -o -name \"*rounding*\" -o -name \"*guide*\" 2>/dev/null | head -20)",
+      "Bash(find /Users/walker/Development/grimoire/grimoire -type f -name \"*.md\" 2>/dev/null | head -30)",
+      "Bash(wc -l /Users/walker/Development/grimoire/grimoire/agents/*.md)",
+      "Bash(find /Users/walker/Development/grimoire -name \"*guide*\" -o -name \"*blog*\" 2>/dev/null | grep -v \".git\")",
+      "Bash(test -f /Users/walker/Development/grimoire/grimoire/concepts/\"back-pressure and what not to ask.md\" && echo \"EXISTS\" || echo \"NOT FOUND\")"
     ],
     "deny": [
       "Edit(file_path:/Users/walker/Development/grimoire/grimoire/**)",
