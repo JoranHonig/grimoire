@@ -1,5 +1,20 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(wc -l /Users/walker/Development/grimoire/grimoire/skills/*.md)"
+    ],
+    "deny": [
+      "Edit(file_path:/Users/walker/Development/grimoire/grimoire/**)",
+      "Write(file_path:/Users/walker/Development/grimoire/grimoire/**)"
+    ]
+  },
   "enabledPlugins": {
     "plugin-dev@claude-plugins-official": true
+  },
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": false
   }
 }
