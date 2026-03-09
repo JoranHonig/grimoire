@@ -1,0 +1,101 @@
+---
+name: Finding Review
+description: >-
+  This skill should be used when the user says "review finding", "review my finding",
+  "check my finding", "fact check finding", "improve finding", "/finding-review", or
+  provides a path to an existing finding file and wants it evaluated for quality. Reviews
+  findings against best practices for title clarity, description completeness, recommendation
+  objectivity, severity accuracy, and reference validity. This skill is NOT for drafting
+  new findings (use /finding-draft) or deduplicating findings (use /finding-dedup).
+user_invocable: true
+---
+
+# Finding Review
+
+Review and harden existing security findings against best practices.
+
+## Prerequisites
+
+Before starting, read `skills/finding/SKILL.md` to understand finding structure, best
+practices, and conventions. That skill defines the format, quality standards, and principles
+that this workflow evaluates against.
+
+## Workflow
+
+When this skill is activated, create a todo list from the following steps. Mark each task
+in_progress before starting it and completed when done.
+
+```
+- [ ] 0. Load finding knowledge (read skills/finding/SKILL.md)
+- [ ] 1. Load and validate finding
+- [ ] 2. Analyze content
+- [ ] 3. Present review and offer updates
+```
+
+---
+
+### 0. Load Finding Knowledge
+
+Read `skills/finding/SKILL.md` to internalize finding structure, best practices, and
+conventions. This is required before proceeding — the base skill defines the standards you
+will evaluate against.
+
+### 1. Load and Validate Finding
+
+Read the target finding file. Parse frontmatter and sections.
+
+Run structural validation:
+```bash
+bash skills/finding/scripts/validate-finding.sh <path-to-finding>
+```
+
+Report any schema violations — missing frontmatter fields, missing required sections,
+invalid severity values.
+
+### 2. Analyze Content
+
+Evaluate the finding against the guidelines in the finding skill and
+`skills/finding/references/finding-best-practices.md`:
+
+**Title** — does it satisfy the where/how/what rule? If not, propose an improved title.
+
+**Description** — is it self-contained? Could a reader unfamiliar with the codebase
+understand the vulnerability from this section alone? Is impact clearly stated?
+
+**Details** — if present, does it add value beyond the description? If absent, should it
+be added?
+
+**Recommendation** — is it objective? Does it avoid non-trivial code suggestions? Is it
+actionable by a project maintainer?
+
+**Severity** — is the estimate reasonable given the described impact, exploitability,
+and preconditions?
+
+**PoC reference** — does the `@`-referenced file exist? Is it correctly formatted?
+
+**References** — are all cited references real and relevant? Are claims fact-checked?
+
+**Familiar agent check** — *(Not yet available. Note: "Issue validity check skipped —
+familiar agent not yet implemented.")*
+
+**Librarian agent check** — *(Not yet available. Note: "Reference discovery skipped —
+librarian agent not yet implemented.")*
+
+### 3. Present Review and Offer Updates
+
+Present the review in structured sections:
+
+- **Passes** — what the finding does well
+- **Warnings** — non-critical issues worth addressing
+- **Failures** — violations of required guidelines
+- **Recommendations** — specific suggested improvements
+
+Each item should cite the guideline it checks against.
+
+Ask the user: *"Apply recommended changes? [y/n]"*
+
+If yes, apply edits to the finding file. Re-run validation. Present the updated finding.
+
+Suggest follow-ups:
+- `/finding-dedup` if the project has multiple findings
+- [[write-poc]] if the PoC section has a placeholder
