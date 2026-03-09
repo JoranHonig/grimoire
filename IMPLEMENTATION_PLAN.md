@@ -243,8 +243,11 @@ Items that work but need structural improvements.
 
 ## Completed
 
-- **skill:finding** — Production-ready. SKILL.md (3 modes: draft/review/dedup), references/finding-format.md + references/finding-best-practices.md + references/finding-structure.md, 3 worked examples (reentrancy, access-control, dedup-scenario), scripts/index-findings.sh + scripts/validate-finding.sh. Full spec coverage (55/55 requirements), familiar/librarian integrations stubbed. 0 debt.
-- **infra:findings-structure** — Implemented as part of skill:finding. Frontmatter schema, filing conventions, cross-linking documented in references/finding-format.md and references/finding-structure.md.
+- **skill:finding-draft** — Production-ready. Drafts structured security findings from vulnerability observations. SKILL.md with 6-step workflow. Uses shared resources in `skills/finding/`.
+- **skill:finding-review** — Production-ready. Reviews existing findings against best practices (title, description, recommendation, severity, references). SKILL.md with 3-step workflow. Uses shared resources in `skills/finding/`.
+- **skill:finding-dedup** — Production-ready. Identifies duplicate/similar findings and resolves overlaps with user confirmation. SKILL.md with 3-step workflow. Uses shared resources in `skills/finding/`.
+- **skills/finding/ (shared resources)** — References (finding-format.md, finding-best-practices.md, finding-structure.md), examples (reentrancy, access-control, dedup-scenario), scripts (index-findings.sh, validate-finding.sh). Full spec coverage (55/55 requirements), familiar/librarian integrations stubbed. 0 debt.
+- **infra:findings-structure** — Implemented as part of the finding skills. Frontmatter schema, filing conventions, cross-linking documented in skills/finding/references/.
 - **skill:checks** — Production-ready. SKILL.md (3 modes: create/apply/manage), references/check-format.md + references/design-principles.md, 5 worked examples, scripts/index-checks.sh + scripts/validate-check.sh. Full spec coverage, 0 debt.
 - **skill:summon** — Production-ready. 290-line SKILL.md, references/domain-crown-jewels.md, examples/grimoire-md-example.md. Full spec coverage, no debt.
 - **skill:cartography** — Production-ready. SKILL.md + references/cartography-format.md + examples/cartography-example.md + scripts/index-cartography.sh. Full spec coverage, no debt.
