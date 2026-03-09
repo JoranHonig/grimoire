@@ -1,43 +1,26 @@
 The [[agents/scribe|scribe]] agent's task is to learn from your findings and conversations.
 
-It builds detection modules and documentation for autonomous detection of vulnerabilities. To do this grimoire has a couple of scribe related skills. 
+It builds detection modules and documentation for autonomous detection of vulnerabilities. To do this grimoire has a couple of scribe related skills. These skills teach your agent how to leverage automation (static-analysis and agentic review) to automatically detect classes of vulnerabilities.
 
-Currently scribe focuses on static analysis, but will extend this to pure agentic detectors in the future.
+## Skills
+### Distill
 
-Static Analysis Skills:
-* semgrep
-* slither
-* codeql
+The scribe is responsible for reviewing a finding and determining whether it is feasible and desirable to build an automated analysis for a given vector. 
 
-These skills teach your agent how to use static analysis tools. 
+The scribe then uses a [[gnome]] for the actual implementation of the module (which we call a [[sigil]] in grimoire). There are skills for the different kinds of sigils which provide instructions on how to build and run idiomatic static analysis modules and agentic review [[checks]].
 
-Scribe Skills:
-* distill
-	* takes a finding / conversation and determines if there are opportunities for automation
-* garbage collection
-	* over time it's likely that duplication will occur, we need a skill to reduce duplication
-	* if there is a static analysis issue triaging skill then it might observe duplicates between static analysis modules, this is probably a good trigger for garbage collection
-* indexing
-	* just some simple utilities to index static analysis tools
+New sigils are always built within the context of the current project and placed in the `grimoire/sigil` directory that's created when grimoire is [[summon]]ed.
 
-ideas:
+At the end of an audit the [[scribe]] agent will extend your [[personal grimoire]] with the sigils built during the audit. Note that some sigils might be very specific to the current project. Your [[scribe]] studies every detector before merging it with your personal grimoire to ensure only generalisable  sigils are stored. 
 
-I built napalm a while ago:
-https://github.com/ConsenSysDiligence/napalm
+You can also ask your scribe to merge your sigils before you've wrapped up your audit.
+### Garbage Collection
 
- It is a tool for orchestrating use of many different detection modules.
-## Static Analysis
+Your [[personal grimoire]] will get a bit cluttered over time and get duplicates so we provide a `scribe-gc` skill.
 
-Sta
+The scribe implements two features to prevent this:
+1. An analysis of the start-of-audit findings raised by [[summon]] will potentially surface duplicate findings. This is a good indication that there are duplicate sigils.
+2. You can also manually initiate a garbage collection analysis. Your scribe will perform a systematic review of your sigils (only in your personal grimoire).
+### Utilities
 
-### Evaluation
-
-* consolidate
-* de-duplicate
-* garb
-
-
-## Additional Notes
-
-* sometimes you build static analysis modules that are quite specific to a given project. Semgrep rules that regex match on function variables are a good example.
-* 
+A `scribe-utilities` skill provides simple utilities to get information about the sigils both in the personal grimoire and in the current project.

@@ -36,7 +36,7 @@ It starts with a couple of high level concrete details answering the following q
 
 Though seemingly trivial, this is the seed out of which the rest of the context grows. 
 
-Once the initial context is established we can dive deeper, and look at *Architecture and Flows*
+Once the initial context is established we can dive deeper, and look at *Architecture and Flows*. 
 
 * (identify primary flows) what are the activities / use-cases? 
     * what steps (flow) are involved in executing those activities and how do they flow through the system 
@@ -82,8 +82,8 @@ project/
     scope/         <- (optional) documentation on the scope from client
     grimoire/
         findings/ <- the findings during this audit 
-        spells/   <- scripts proof of concepts and static analysis modules
-        tomes/    <- documentation and learnings
+        sigil-findings/ <- a directory with findings sourced from sigils
+        sigils/   <- scripts proof of concepts and static analysis modules
         tmp/      <- directory for temporary files and scripts
     GRIMOIRE.md   <- main contextual map
 ```
@@ -92,10 +92,7 @@ Similar to obsidian Grimoire employs `[[doc-name]]` style cross-linking between 
 
 ### The Right Time for Automation
 
-Note: The scribe is not implemented yet so this is WIP.
+Grimoire automatically builds and refines a repository of static analysis modules and agentic checks called [[sigil]]s. 
 
-Another feature of grimoire is the [[agents/scribe]] and the users personal [[spellbook]].
+The grimoire summon command will kick off all sub-agent sigils stored in your grimoire at the start of an engagement. Your [[familiar]] will triage their findings and eventually surface them for you to review!
 
-Over time users will acquire a set of static analysis modules that go beyond what's publicly available. This is their own secret arcane compendium.
-
-The start of an audit ( when one would kick off `/summon` ) is the exact right time to run these static analysis modules and daemons.  

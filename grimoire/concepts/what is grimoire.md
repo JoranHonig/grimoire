@@ -36,12 +36,3 @@ Grimoire is set up to provide as little friction as possible.
 There are a couple of features that require you to read the documentation. `/summon` being a good example. However, most of grimoire is designed to be minimalistic and frictionless, skills will get triggered when you need them, agents started when useful. 
 
 You can just use it like you would a normal agent and have Grimoire improve your experience by steering the agent to provide better results.
-
-## Progressing 
-
-Grimoire is a living thing, it grows as you do. 
-
-We've compiled a set of *tomes* with instructions to help you interact with Grimoire for the best results.
-
-- [[back-pressure and what not to ask]]
-- [[hypothesis generation - fail as fast as possible]]
