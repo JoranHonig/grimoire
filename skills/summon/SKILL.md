@@ -38,6 +38,7 @@ in_progress before starting it and completed when done.
 - [ ] 6. Write GRIMOIRE.md — assemble the contextual map
 - [ ] 7. Review GRIMOIRE.md — kick off subagent to verify accuracy and trim bloat
 - [ ] 8. Surface automation opportunities — check for spellbook modules to run
+- [ ] 9. Spawn sigil swarm — run checks-based sigils against the codebase
 ```
 
 ---
@@ -79,8 +80,10 @@ project/
     in_scope_repo/              # already present
     grimoire/
         findings/               # findings during this audit
+        sigil-findings/         # findings sourced from sigil agents
         spells/                 # scripts, PoCs, static analysis modules
         tomes/                  # documentation, detailed notes, learnings
+        tmp/                    # temporary files and scripts
     GRIMOIRE.md                 # main contextual map (created in step 6)
 ```
 
@@ -274,6 +277,87 @@ If no spellbook exists yet:
 
 The scribe agent is planned but not yet implemented. Do not attempt to invoke it. Simply note
 in GRIMOIRE.md that detection modules will be added as findings accumulate.
+
+### 9. Spawn Sigil Swarm
+
+After automation discovery, spawn sigil agents to hunt for known vulnerability patterns across
+the codebase. Each sigil is a single-context agent that hunts one bug pattern using a check
+from the spellbook.
+
+Consult `references/sigil-spawning.md` for the subagent prompt template and detailed guidance.
+
+**Index available checks.**
+
+Run the `index-checks.sh` script from the checks skill's `scripts/` directory, passing
+`grimoire/spells/checks/` as the target. If the directory does not exist or contains no
+checks, note "No checks available — sigil swarm skipped" in GRIMOIRE.md under Automation
+and skip this step. A fresh engagement with no prior checks is normal.
+
+**Filter by language.**
+
+Match each check's `languages` field against the languages identified in step 3 (the Target
+section of GRIMOIRE.md). Only include checks whose language matches the target codebase.
+Include checks with an empty or wildcard languages field regardless of target.
+
+Run the `select-checks.sh` script from this skill's `scripts/` directory, passing
+`grimoire/spells/checks/` and a comma-separated list of target languages from GRIMOIRE.md.
+The script outputs only the checks that apply.
+
+**Confirm with the user.**
+
+Present the user with:
+- How many applicable checks were found
+- A brief list of check names and what they detect
+- The estimated number of sigils to spawn
+
+Ask whether to: **spawn all**, **select a subset**, or **skip**. Sigil spawning is the most
+expensive operation in the workflow — the user must explicitly approve it.
+
+If there are more than 20 applicable checks, warn about the time cost and suggest filtering
+by tag or selecting a subset.
+
+**Spawn sigils.**
+
+For each approved check, spawn a subagent sigil. Process in batches of 5 to manage context
+budget. For each check, give the subagent these instructions:
+
+1. Read GRIMOIRE.md for engagement context
+2. Read the check file at `<filepath>` for the vulnerability pattern
+3. Hunt following the protocol in `references/sigil-spawning.md` — formulate a hypothesis from
+   the check, search the codebase, evaluate evidence, produce a finding or dismiss
+4. Write any findings to `grimoire/sigil-findings/<check-slug>.md` where `<check-slug>` is the
+   check's filename without extension. If a check produces multiple findings, append a numeric
+   suffix (e.g., `reentrancy-1.md`, `reentrancy-2.md`)
+5. Return a hunt summary: check name, verdict (finding or dismissed), confidence, and file path
+   if a finding was written
+
+Wait for each batch of 5 to complete before spawning the next batch.
+
+**Collect and present results.**
+
+After all sigils complete, aggregate results. Present a summary:
+
+```
+## Sigil Swarm Results
+
+Checks run: [N]  |  Findings: [N]  |  Dismissed: [N]
+
+| Check | Verdict | Severity | Confidence | Finding |
+|-------|---------|----------|------------|---------|
+```
+
+Group findings by severity (Critical/High first).
+
+**Note:** The familiar agent is not yet implemented. Findings have not been triaged for false
+positives. Review each finding before acting on it. When the familiar agent ships, this step
+will route findings through familiar for triage before presenting them.
+
+**Update GRIMOIRE.md.**
+
+Append to the Automation section:
+- Number of checks run and findings produced
+- Link to `grimoire/sigil-findings/` for details
+- Note which checks were skipped (if any) and why
 
 ---
 
