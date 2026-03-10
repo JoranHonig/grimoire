@@ -2,8 +2,9 @@
 name: GC Cartography
 description: >-
   This skill should be used when the user says "clean up flows",
-  "merge flows", "gc cartography", "/gc-cartography",
+  "merge flows", "gc cartography", "garbage collect flows",
   "deduplicate flows", "consolidate cartography", "too many flow files",
+  "overlapping flows", "duplicate cartography", "reduce flow count",
   or wants to identify and merge overlapping cartography files, remove
   stale references, and reduce duplication in the grimoire/cartography/
   directory.
@@ -55,7 +56,10 @@ Build an in-memory map of flow → referenced file paths.
 
 ### 2. Detect Overlap
 
-Compare every pair of flows. Flag pairs that meet any of these criteria:
+Run `scripts/gc-cartography/scripts/detect-overlaps.sh` or compare manually. Consult
+`references/overlap-metrics.md` for the overlap formula and tier thresholds.
+
+Flag pairs that meet any of these criteria:
 
 - **Component overlap >40%** — more than 40% of one flow's referenced file paths also appear
   in the other flow
@@ -69,6 +73,8 @@ For each flagged pair, note:
   activities that happen to share infrastructure
 
 ### 3. Propose Merge Plan
+
+Consult `references/merge-decisions.md` for the merge-vs-keep decision framework.
 
 Present merge candidates to the user. For each candidate pair:
 - Show both flow names and descriptions
@@ -105,9 +111,9 @@ For each approved merge:
 6. **Unique content becomes conditional** — any content from the absorbed flow that doesn't
    fit naturally into the primary flow's main body should become a conditional section.
 
-7. **Delete the absorbed flow's file.**
+7. **Delete the absorbed flow's file** after confirming the merge is correct.
 
-Consult `references/cartography-format.md` from the [[cartography]] skill for format details.
+Consult `skills/cartography/references/cartography-format.md` for format details.
 
 ### 5. Clean Up Cross-References
 
