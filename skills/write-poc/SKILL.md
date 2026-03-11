@@ -59,11 +59,11 @@ in_progress before starting it and completed when done. Use descriptions from th
 sections below.
 
 ```
-- [ ] 1. Gather vulnerability details — study the issue and impacted code, establish vuln class, root cause, attack surface, prerequisites, and impact. Confirm with user.
+- [ ] 1. Gather vulnerability details — study the issue and impacted code, establish vuln class, root cause, attack surface, prerequisites, and impact. Consider dispatching a librarian for external references. Confirm with user.
 - [ ] 2. Define exploit flow — formulate goal condition, determine mono/poly flow, sketch steps if multi-step. Confirm with user.
 - [ ] 3. Determine PoC approach — choose test case vs script, for smart contracts decide fork/unit test and whether to use forge-poc-templates. Confirm with user.
-- [ ] 4. Write the PoC — implement with header block, section comments, benign payloads, clear output, and all implementation guidelines. Confirm with user.
-- [ ] 5. Review before delivery — verify checklist: no destructive payloads, demonstrates the vuln, clear comments, clear output, complete reproduction steps. Confirm with user.
+- [ ] 4. Write the PoC — dispatch a gnome with the full briefing from phases 1-3 to implement the PoC. Review gnome output and confirm with user.
+- [ ] 5. Review before delivery — dispatch a familiar to independently verify the PoC against the review checklist. Present familiar's assessment to user for final approval.
 ```
 
 ---
@@ -86,6 +86,12 @@ Before writing any code, establish the following:
 If any detail is unclear, ask the user before proceeding. A PoC built on incorrect assumptions wastes time.
 
 Study both the impacted code and the issue description provided by the user, make sure to understand the exploit flow deeply.
+
+**Librarian.** If the vulnerability involves external protocols, specifications, or known
+vulnerability patterns, consider dispatching a librarian agent to retrieve relevant
+documentation, prior findings, or security advisories. This is especially useful for
+protocol-level bugs (e.g., ERC specs, DeFi invariants) where the codebase alone doesn't
+tell the full story.
 
 Check in with the user before continuing!
 
@@ -172,6 +178,25 @@ Always confirm the PoC approach with the user.
 
 ### 4. Write the PoC
 
+**Delegate to a gnome agent.** By this point all decisions have been made — the vulnerability
+is understood, the exploit flow is designed, and the approach is confirmed. Dispatch a gnome
+(subagent) to implement the PoC in an isolated context. This keeps the orchestration context
+clean from implementation details and preserves context for the review phase.
+
+**Gnome briefing.** Provide the gnome with:
+- The vulnerability details from phase 1 (class, root cause, affected component, impact)
+- The exploit flow from phase 2 (goal condition, mono/poly, step sketch)
+- The chosen approach from phase 3 (test case vs script, fork vs unit, forge-poc-templates)
+- The matching reference file(s) for the vulnerability class
+- The specific source files it needs to read
+- An example PoC from the `examples/` directory that best matches the chosen approach
+
+**Gnome instructions.** The gnome must follow all implementation guidelines below and report
+back with: the implemented PoC, a summary of decisions made during implementation, and any
+blockers or assumptions it had to make.
+
+**Implementation guidelines (included in gnome briefing):**
+
 Structure every PoC with these elements:
 
 **Header block (comment at top of file) or comment for the test case:**
@@ -186,7 +211,7 @@ Use the comment standard that best applies for the language/ framework that the 
 
 This means natspec for solidity, javadoc for java, etc.
 
-**Implementation guidelines:**
+**Implementation rules:**
 - **Use benign payloads.** Demonstrate the vulnerability without causing harm. For example, use
   `alert(1)` or `<img src=x>` for XSS, `sleep()` for SQL injection, `id` or `whoami` for
   command injection, `127.0.0.1` for SSRF. Avoid destructive payloads.
@@ -204,8 +229,8 @@ This means natspec for solidity, javadoc for java, etc.
 - **Test case success.** When implementing a PoC as a test case, test passage should
   indicate exploit success.
 - **Monetary Impact.** If the flaw allows extraction of funds such as for smart contract
-  vulnerabilities then clearly demonstrate profitability of an attack. Measure attacker 
-  balance before and after the proof of concept and determine profit. Print this profit so 
+  vulnerabilities then clearly demonstrate profitability of an attack. Measure attacker
+  balance before and after the proof of concept and determine profit. Print this profit so
   the user can verify.
 - **Use section header comments.** Organize PoC code into logical blocks using the format
   `// == [ Section Name ] ==` to let readers quickly skim and distinguish preamble/setup from
@@ -219,20 +244,32 @@ Important: Never run the PoC against a production environment without asking the
 
 **Confirm**
 
-Check in with the user. Walk them through the completed PoC and confirm it matches the
-agreed approach, covers the full exploit flow, and produces clear output.
+Once the gnome returns, review its output for obvious issues and present the completed PoC
+to the user. Walk them through the implementation and confirm it matches the agreed approach,
+covers the full exploit flow, and produces clear output.
 
 ### 5. Review Before Delivery
 
-Before finalizing, verify:
+**Delegate to a familiar agent.** Dispatch a familiar (subagent using a high-reasoning model)
+to independently review the PoC produced in phase 4. The familiar acts as a skeptical
+reviewer — it verifies rather than assumes.
+
+**Familiar briefing.** Provide the familiar with:
+- The vulnerability details from phase 1
+- The exploit flow from phase 2
+- The completed PoC code from phase 4
+
+**Familiar review checklist.** The familiar must verify each item and report its assessment:
 
 - [ ] No destructive payloads or actions
 - [ ] PoC actually demonstrates the vulnerability (not just a theoretical description)
+- [ ] The exploit logic correctly implements the attack flow from phase 2
 - [ ] Comments explain the exploit chain clearly
 - [ ] Output clearly indicates success or failure
 - [ ] Reproduction steps are complete and ordered
+- [ ] An accuracy and completeness estimate for the PoC
 
-Check in with the user for final approval before delivery.
+Present the familiar's review alongside the PoC to the user for final approval before delivery.
 
 ## Additional Resources
 
