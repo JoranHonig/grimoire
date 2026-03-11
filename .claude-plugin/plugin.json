@@ -5,5 +5,14 @@
   "components": {
     "skills": "auto",
     "agents": "auto"
+  },
+  "mcpServers": {
+    "claudit": {
+      "command": "npx",
+      "args": ["-y", "@marchev/claudit@latest"],
+      "env": {
+        "SOLODIT_API_KEY": "${SOLODIT_API_KEY}"
+      }
+    }
   }
 }
