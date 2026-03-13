@@ -25,7 +25,7 @@ Find `@audit` annotations in a codebase and return them as structured JSON.
 ## Invocation
 
 ```
-python3 skills/annotation/scripts/find-annotations.py <directory> [--tag TAG] [--format json|table]
+uv run skills/annotation/scripts/find-annotations.py <directory> [--tag TAG] [--format json|table]
 ```
 
 - `directory` — path to scan (usually the project root or `src/`)
@@ -52,11 +52,6 @@ The script has two tiers of support:
 - **All languages** — grep-based discovery. Finds annotations in any text file. Context fields are `unknown`.
 - **Rust and Solidity** — tree-sitter parsing resolves `context_type` and `context_name` to the enclosing function, contract, trait, impl, or module. Falls back to grep if tree-sitter dependencies are not installed.
 
-Install optional dependencies for tree-sitter support:
-
-```
-pip install -r skills/annotation/scripts/requirements.txt
-```
 
 ## Annotation Types
 
