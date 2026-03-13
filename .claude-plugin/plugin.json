@@ -2,10 +2,6 @@
   "name": "grimoire",
   "version": "0.1.0",
   "description": "Security research toolkit for discovering and remediating vulnerabilities",
-  "components": {
-    "skills": "auto",
-    "agents": "auto"
-  },
   "mcpServers": {
     "claudit": {
       "command": "npx",
