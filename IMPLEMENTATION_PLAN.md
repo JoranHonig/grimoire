@@ -6,23 +6,7 @@ Generated: 2026-03-13
 
 Items with remaining work, sorted by priority (highest first).
 
-### — Skills & Agents —
-
-### ~~1. skill:annotation — audit annotation discovery~~ → COMPLETED
-
-### 2. skill:cartography — swarm exploration + context rebuild
-- **Status:** implemented (structural gaps vs spec)
-- **Spec detail:** detailed
-- **Spec:** `grimoire/skills/cartography.md`
-- **Dependencies:** None
-- **Why #2:** The spec's 100-subagent swarm exploration is a distinctive, high-impact feature that the implementation softens to "one subagent per search term." Adding this + context rebuild guidance significantly increases cartography's value for large codebases. Already implemented — these are targeted improvements.
-- **Tasks:**
-  1. Add swarm exploration guidance to step 3 — specify target subagent count for unseeded exploration (spec says 100)
-  2. Add "Context Rebuild" section explaining how agents should use cartography files to rebuild context rather than re-exploring from scratch
-  3. Add a second example at a different complexity level (e.g., cross-service flow with conditional sections)
-  4. Expand conditional sections guidance in step 4 with concrete load-vs-skip criteria
-  5. Add explicit callgraph-following instructions to seeded exploration mode
-
+### — Skills & Agents -
 ### 3. skill:semgrep
 - **Status:** not_implemented
 - **Spec detail:** partial
@@ -252,6 +236,7 @@ Items with status `implemented` and no remaining tasks.
 - **skill:finding-dedup** — 4-step workflow. Extends spec with 3-class model. 0 debt.
 - **skill:finding-utilities** — Absorbed into finding/scripts/ (index-findings.sh, validate-finding.sh). 0 debt.
 - **skill:checks** — 8-step workflow, 2 references, 5 examples, 2 scripts. Full pattern profile. 0 debt.
+- **skill:cartography** — 6-step workflow, 1 reference, 2 examples, 1 script. Swarm exploration (100 subagents), callgraph-following, context rebuild, conditional load/skip criteria. Full spec coverage. 0 debt.
 - **skill:review-cartography** — 6-step workflow, references, examples, scripts. 0 debt.
 - **skill:gc-cartography** — 6-step workflow, 2 references, 1 example, 4 scripts. Most robust skill. 0 debt.
 - **agent:librarian** — External research agent. 2 modes, MCP tools (claudit) wired, citation-backed. Auto-discovered.

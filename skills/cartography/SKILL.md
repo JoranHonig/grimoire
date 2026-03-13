@@ -72,15 +72,39 @@ There are two exploration modes depending on what the user provides:
 
 **Seeded exploration** — the user provides starting files or hints (e.g., "trace how
 authentication works starting from `gateway/src/middleware/auth.ts`"). Use these as entry points
-and trace the flow from there. Read the seeded files, identify callees, follow the execution
-path.
+and trace the flow by following the callgraph:
+
+1. Read the seeded files carefully
+2. Identify all function/method calls made from the entry point
+3. For each callee, open its definition and repeat — follow the callgraph depth-first along the
+   flow's execution path
+4. At each hop, note: the file, the symbol, and its role in the flow (one line)
+5. Stop when you reach leaf functions (no further relevant calls), external service boundaries,
+   or when the flow loops back to already-visited code
+6. Use subagents for branches — if the callgraph forks into independent paths (e.g., an async
+   side-effect vs. the main return path), give each branch to a subagent to trace in parallel
+
+Use `path/to/file:symbol` notation to track each hop. This directly becomes the Flow Sequence
+and Key Components in the cartography file.
 
 **Unseeded exploration** — the user describes a flow but doesn't point to specific files (e.g.,
-"map how secrets are retrieved"). Spawn subagents to search for relevant code:
-- One subagent per likely search term (function names, module names, keywords from the flow
-  description)
-- Subagents should search for entry points, handlers, and key symbols related to the flow
-- Collect results and identify the most relevant files
+"map how secrets are retrieved"). Deploy a **swarm** of subagents to explore the codebase:
+
+1. Study the user's flow description. Ask clarifying questions if the scope is ambiguous.
+2. Generate search queries — brainstorm function names, module names, class names, route
+   patterns, config keys, error messages, log strings, and domain-specific keywords related to
+   the flow. Aim for **100 subagents** — breadth matters more than precision at this stage.
+3. Spawn all subagents in parallel. Each subagent gets one search query and should:
+   - Search for the term across the codebase (file names, symbols, content)
+   - For each match, read enough context to assess relevance (a few lines around the match)
+   - Return: file path, symbol, one-line relevance assessment, confidence (high/medium/low)
+4. Collect all results. Deduplicate by file. Rank by frequency (files appearing in multiple
+   subagent results are more likely to be core to the flow) and confidence.
+5. From the top-ranked files, switch to **callgraph-following** (as in seeded mode) to trace the
+   actual execution path and build the flow sequence.
+
+The swarm casts a wide net; the callgraph pass refines it into a coherent flow. Don't skip
+step 5 — a bag of search results is not a flow map.
 
 In both modes, gather:
 - **Entry points** — where execution begins for this flow (endpoints, handlers, CLI commands)
@@ -92,8 +116,9 @@ In both modes, gather:
 Use subagents to parallelize exploration. Keep the main context focused on assembling the map
 rather than reading every file in detail.
 
-Consult `references/cartography-format.md` for the exact format specification and
-`examples/cartography-example.md` for a worked example.
+Consult `references/cartography-format.md` for the exact format specification and the examples:
+- `examples/cartography-example.md` — single-service flow, one conditional section
+- `examples/cross-service-auth-example.md` — cross-service flow, multiple conditionals
 
 ### 4. Document the Flow
 
@@ -108,7 +133,13 @@ The file must follow the format defined in `references/cartography-format.md`:
 4. **Key Components** — files with one-line role descriptions
 5. **Flow Sequence** — numbered steps with file references
 6. **Security Notes** — trust boundaries, gaps, observations
-7. **Conditional sections** — if the flow has independent sub-flows that would pollute context
+7. **Conditional sections** — for sub-flows that are independently useful but would pollute
+   context if always loaded. Use when: the main body exceeds ~80 lines, or a sub-flow is only
+   relevant for specific investigations. Write the `<!-- condition: ... -->` comment as a
+   concrete, matchable topic description — an agent reads this comment and decides whether to
+   load the section based on the user's current question. **Load** when the user's question
+   directly matches the condition topic. **Skip** when the user is focused on the main flow and
+   the conditional topic hasn't been mentioned.
 8. **Related Flows** — cross-links to other cartography files
 
 **Key constraint:** the file documents *where* to look, not *what the code does*. If you find
@@ -139,6 +170,31 @@ Show the user:
 Suggest follow-up actions:
 - **[[review-cartography]]** — to verify and refine the flow against the actual codebase
 - **[[gc-cartography]]** — if there are many flows, to clean up overlap and duplication
+
+---
+
+## Context Rebuild
+
+Cartography files exist so that agents don't repeat expensive exploration. When an agent needs
+to understand a flow that has already been mapped, it should **rebuild context from the
+cartography file** rather than re-exploring from scratch:
+
+1. **Load the cartography file** — read the frontmatter, overview, and entry points to confirm
+   this is the right flow.
+2. **Evaluate conditional sections** — read each `<!-- condition: ... -->` comment. If the
+   user's current question matches the condition topic, load that section. If not, skip it.
+   When in doubt, skip — loading unnecessary conditionals wastes context.
+3. **Open the referenced files** — use the Key Components and Flow Sequence as a reading list.
+   Open these files in the order the flow sequence specifies. This is where actual understanding
+   is built — the cartography file is the map, the source files are the territory.
+4. **Check freshness** — if the `updated` date is old or the referenced files have changed
+   significantly since the cartography file was written, the map may be stale. Consider running
+   [[review-cartography]] to update it before relying on it.
+5. **Follow cross-links** — if the investigation touches Related Flows, load those cartography
+   files too (repeating steps 1-3 for each).
+
+An agent that follows this process gets to a working understanding of the flow in seconds,
+using tokens only on reading source files rather than searching for them.
 
 ---
 
