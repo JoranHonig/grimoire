@@ -1,5 +1,5 @@
 ---
-name: Review Cartography
+name: review-cartography
 description: >-
   This skill should be used when the user says "review a flow",
   "improve a flow", "verify a flow", "refine cartography",

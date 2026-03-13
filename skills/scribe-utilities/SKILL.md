@@ -1,5 +1,5 @@
 ---
-name: Scribe Utilities
+name: scribe-utilities
 description: >-
   This skill should be used when the user says "list my sigils", "what detectors
   do I have", "show my spellbook", "scribe info", "/scribe-utilities", "what's

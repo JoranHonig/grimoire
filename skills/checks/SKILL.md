@@ -1,5 +1,5 @@
 ---
-name: Checks
+name: checks
 description: >-
   This skill should be used when the user says "create a check", "write a check",
   "add a check", "apply checks", "run checks", "/checks", "vulnerability pattern",

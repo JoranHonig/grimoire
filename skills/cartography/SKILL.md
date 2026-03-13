@@ -1,5 +1,5 @@
 ---
-name: Cartography
+name: cartography
 description: >-
   This skill should be used when the user says "build context on a flow",
   "trace a flow", "map how X works", "cartography", "/cartography",

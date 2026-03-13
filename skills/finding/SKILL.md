@@ -1,5 +1,5 @@
 ---
-name: Finding
+name: finding
 description: >-
   This skill should be used when the user asks about findings, finding structure,
   finding format, finding best practices, "how should a finding look", "what goes in a

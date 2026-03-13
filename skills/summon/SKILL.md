@@ -1,5 +1,5 @@
 ---
-name: Summon
+name: summon
 description: >-
   This skill should be used when the user says "summon", "summon grimoire",
   "/summon", "initialize grimoire", "start an audit", "begin security review",

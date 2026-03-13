@@ -1,5 +1,5 @@
 ---
-name: GC Cartography
+name: gc-cartography
 description: >-
   This skill should be used when the user says "clean up flows",
   "merge flows", "gc cartography", "garbage collect flows",

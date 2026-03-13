@@ -1,5 +1,5 @@
 ---
-name: Scribe GC
+name: scribe-gc
 description: >-
   This skill should be used when the user says "clean up sigils", "garbage
   collect", "deduplicate sigils", "scribe gc", "/scribe-gc", "merge duplicate

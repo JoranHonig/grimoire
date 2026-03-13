@@ -1,5 +1,5 @@
 ---
-name: Finding Dedup
+name: finding-dedup
 description: >-
   This skill should be used when the user says "deduplicate findings", "dedup findings",
   "compare findings", "find duplicate findings", "merge findings", "clean up findings",

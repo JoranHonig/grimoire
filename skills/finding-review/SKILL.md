@@ -1,5 +1,5 @@
 ---
-name: Finding Review
+name: finding-review
 description: >-
   This skill should be used when the user says "review finding", "review my finding",
   "check my finding", "fact check finding", "improve finding", "/finding-review", or

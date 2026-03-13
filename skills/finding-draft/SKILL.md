@@ -1,5 +1,5 @@
 ---
-name: Finding Draft
+name: finding-draft
 description: >-
   This skill should be used when the user says "draft a finding", "write a finding",
   "create a finding", "document a vulnerability", "write up this bug", "finding template",

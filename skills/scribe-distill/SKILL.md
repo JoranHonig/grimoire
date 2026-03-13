@@ -1,5 +1,5 @@
 ---
-name: Scribe Distill
+name: scribe-distill
 description: >-
   This skill should be used when the user says "distill this finding", "create
   a detection module", "encode this finding", "make a sigil from this",

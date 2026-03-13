@@ -1,5 +1,5 @@
 ---
-name: Write Proof of Concept
+name: write-poc
 user_invocable: true
 description: >-
   This skill should be used when the user asks to "write a proof of concept",
