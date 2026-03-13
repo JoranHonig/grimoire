@@ -8,22 +8,7 @@ Items with remaining work, sorted by priority (highest first).
 
 ### — Skills & Agents —
 
-### 1. skill:annotation — audit annotation discovery
-- **Status:** not_implemented
-- **Spec detail:** detailed
-- **Spec:** `grimoire/skills/annotation.md`
-- **Dependencies:** None
-- **Why #1:** Detailed spec, zero dependencies, immediately useful for any audit. Bridges the human annotation workflow (@audit tags from tintinweb's solidity visual developer) with grimoire's agent tooling. Self-contained utility skill. Unique in requiring a Python CLI (python-fire + tree-sitter), which establishes a new pattern for tool-backed skills.
-- **Tasks:**
-  1. Create `skills/annotation/` directory with SKILL.md — clean agent instructions for invoking the annotation CLI (spec explicitly says SKILL.md should not dive deep into usage)
-  2. Implement Python script (`scripts/find-annotations.py`) with python-fire CLI:
-     - Tree-sitter parsing for Rust and Solidity (extract function/trait/contract context)
-     - Grep fallback for all other languages when tree-sitter unavailable
-     - JSON output with annotation content + contextual metadata (file, line, tag, content, context_type, context_name)
-  3. Define supported annotation types: @audit-ok, @audit, @audit-info, @audit-low, @audit-med, @audit-high, @audit-crit, @audit-(*) custom
-  4. Build `references/` — annotation workflow patterns, when to use each tag type, integration with audit workflows
-  5. Add `examples/` — worked examples (e.g., find all @audit-high in a Solidity codebase, export annotations as checklist)
-  6. Add validation/export scripts to `scripts/`
+### ~~1. skill:annotation — audit annotation discovery~~ → COMPLETED
 
 ### 2. skill:cartography — swarm exploration + context rebuild
 - **Status:** implemented (structural gaps vs spec)
@@ -283,3 +268,4 @@ Items with status `implemented` and no remaining tasks.
 - **concept:what-is-grimoire** — Covered by README.md and plugin design.
 - **concept:agent-context** — Subagent patterns used throughout all implemented skills/agents.
 - **concept:don't-get-in-the-way** — Exploration-first approach in cartography and summon.
+- **skill:annotation** — Python CLI (python-fire + tree-sitter) for @audit annotation discovery. SKILL.md + 1 reference + 1 example + find-annotations.py script. First tool-backed skill. Full spec coverage. Establishes the Python CLI pattern for future tool-backed skills.

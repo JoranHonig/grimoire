@@ -1,0 +1,8 @@
+# Required
+fire>=0.5
+
+# Optional — enables richer context for Rust and Solidity files.
+# The script works without these (falls back to grep-based discovery).
+tree-sitter>=0.24
+tree-sitter-rust>=0.23
+tree-sitter-solidity>=0.2
