@@ -1,155 +1,186 @@
 # Implementation Plan
 
-Generated: 2026-03-10
+Generated: 2026-03-13
 
 ## Priority Queue
 
 Items with remaining work, sorted by priority (highest first).
 
-### 1. concept:context-building — gadgets implementation
+### 1. skill:cartography — swarm exploration + context rebuild
+- **Status:** implemented (structural gaps vs spec)
+- **Spec detail:** detailed
+- **Spec:** `grimoire/skills/cartography.md`
+- **Dependencies:** None
+- **Why #1:** The spec's 100-subagent swarm exploration is a distinctive, high-impact feature that the implementation softens to "one subagent per search term." Adding this + context rebuild guidance significantly increases cartography's value for large codebases. Already implemented — these are targeted improvements.
+- **Tasks:**
+  1. Add swarm exploration guidance to step 3 — specify target subagent count for unseeded exploration (spec says 100)
+  2. Add "Context Rebuild" section explaining how agents should use cartography files to rebuild context rather than re-exploring from scratch
+  3. Add a second example at a different complexity level (e.g., cross-service flow with conditional sections)
+  4. Expand conditional sections guidance in step 4 with concrete load-vs-skip criteria
+  5. Add explicit callgraph-following instructions to seeded exploration mode
+
+### 2. concept:context-building — gadgets implementation
 - **Status:** not_implemented (gadgets concept completely absent)
 - **Spec detail:** partial
 - **Spec:** `grimoire/concepts/context building.md`
 - **Dependencies:** None for concept; gadgets integration depends on write-poc, sigil
-- **Why #1:** Gadgets are a load-bearing concept for bounty hunting leverage — tricks/patterns that enable critical vulns — yet completely absent from the implementation. Cross-cutting gap affecting write-poc, sigil, and context building.
+- **Why #2:** Gadgets are a load-bearing concept for bounty hunting leverage — tricks/primitives that enable critical exploit chains — yet completely absent from the implementation. The spec describes gadgets as "tricks I found that allow me to have the code do something unexpected" and suggests an agent could "suggest them when I'm considering whether an issue can be exploited." Cross-cuts write-poc, sigil, summon, and scribe-distill.
 - **Tasks:**
   1. Document gadget concept and catalog structure (format, frontmatter, indexing)
-  2. Add gadget awareness to write-poc workflow (check for applicable gadgets during PoC construction)
+  2. Add gadget awareness to write-poc phase 2 (check for applicable gadgets during exploit flow construction)
   3. Add gadget surfacing to sigil output format ("interesting gadget patterns discovered")
   4. Add gadget collection section to GRIMOIRE.md template in summon
-  5. Consider scribe mode for gadget indexing (future)
+  5. Extend scribe-distill to produce gadget entries alongside checks and knowledge artifacts
+  6. Consider gadget storage location: `grimoire/tomes/gadgets/` or `~/.grimoire/gadgets/`
 
-### 2. skill:semgrep
+### 3. skill:semgrep
 - **Status:** not_implemented
-- **Spec detail:** partial
+- **Spec detail:** sketch
 - **Spec:** `grimoire/skills/sigils/semgrep.md`
 - **Dependencies:** None
-- **Why #2:** Primary backpressure tool. Unblocks agent:sigil Mode 3 (super-sigil) — semgrep runners spawning validation sigils. Advances concept:backpressure adoption across the plugin.
+- **Why #3:** Primary backpressure enforcement tool. Unblocks agent:sigil Mode 3 (super-sigil) — semgrep runners spawning validation sigils. Gnome agent already has a "build semgrep rule" mode providing a clear integration point. Advances concept:backpressure adoption.
 - **Tasks:**
   1. Create `skills/semgrep/` directory with SKILL.md
   2. Build references covering rule anatomy, testing, and rule merging guidance
   3. Create worked examples of semgrep rules for common vuln patterns
-  4. Wire into sigil Mode 3 as super-sigil runner
+  4. Wire into gnome Mode 2 (build semgrep rule) as the primary skill reference
+  - *Cross-cutting:* Add backpressure guidance — when a check makes a completeness claim, suggest creating a semgrep rule for enforcement
 
-### 3. concept:trivial-verifiability — falsifiable vs verifiable distinction
-- **Status:** partially_adopted
+### 4. concept:backpressure — enforcement guidance
+- **Status:** adopted (sigil agent uses it as core principle), partial (enforcement tooling)
+- **Spec detail:** detailed
+- **Spec:** `grimoire/concepts/backpressure.md`
+- **Dependencies:** skill:semgrep (#2), skill:slither (#9) for full enforcement
+- **Tasks:**
+  1. Create shared reference doc `backpressure-methods.md` listing when to use semgrep/codeql/slither vs agentic checks
+  2. Add to checks design-principles: warning that grep results are not exhaustive; suggest static analysis rule when making completeness claims
+  3. Add to summon: explicit backpressure check before recommending autonomous findings
+
+### 5. concept:trivial-verifiability — falsifiable vs verifiable distinction
+- **Status:** adopted (core principle), partial (nuanced distinction)
 - **Spec detail:** detailed
 - **Spec:** `grimoire/concepts/(trivial) verifiability.md`
 - **Dependencies:** None
 - **Tasks:**
-  1. Add verifiability language to write-poc steps 2-3 (goal condition as testable hypothesis)
-  2. Add falsifiable vs verifiable distinction to sigil strategy section
-  3. Add to familiar: guidance on using falsifiable framing when dismissing
-  4. Add to checks: guide toward falsifiable patterns ("find locations where X occurs") not universal negatives
-
-### 4. concept:backpressure — explicit enforcement
-- **Status:** adopted (principle), partial (enforcement)
-- **Spec detail:** detailed
-- **Spec:** `grimoire/concepts/backpressure.md`
-- **Dependencies:** skill:semgrep, skill:slither for full enforcement
-- **Tasks:**
-  1. Create shared reference doc `backpressure-methods.md` listing when to use semgrep/codeql/slither vs agentic checks
-  2. Add constraint to agents: "Do not answer 'are all instances of X handled' without a static analysis rule to back it up"
-  3. Add to summon: explicit check for backpressure before recommending autonomous findings
-
-### 5. concept:the-original-sin + concept:leverage — explicit in skills
-- **Status:** adopted (implicit)
-- **Spec detail:** detailed
-- **Dependencies:** None
-- **Tasks:**
-  1. Create shared reference doc `principles.md` covering human judgment, leverage, and the original sin
-  2. Update write-poc philosophy section to reference human-directed hypothesis, not autonomous exploitation
-  3. Update summon philosophy to emphasize researcher interprets crown jewels, agent only maps
+  1. Add falsifiable vs verifiable distinction to checks design-principles (warn against treating grep as exhaustive)
+  2. Add to cartography/summon: guidance on using non-verifiable queries as exploration tools while treating output as radioactive
+  3. Frame goal condition as "testable hypothesis" in write-poc steps 2-3
 
 ### 6. concept:hypothesis-generation — seeded/unseeded guidance
-- **Status:** adopted (core), partial (guidance)
+- **Status:** adopted (core), partial (associative mode absent)
 - **Spec detail:** detailed
 - **Spec:** `grimoire/concepts/hypothesis generation.md`
 - **Dependencies:** None
 - **Tasks:**
-  1. Frame goal condition as "testable hypothesis" in write-poc
+  1. Frame cartography security notes as testable hypotheses (e.g., "Hypothesis: trust boundary at X can be bypassed via Y")
   2. Add seeded vs unseeded guidance to cartography exploration modes
   3. Add to sigil: "If you discover tangential issues, note briefly and suggest spawning a separate sigil"
+  4. Consider lightweight hook in write-poc/cartography that surfaces related vulnerability patterns from spellbook
 
 ### 7. flow:finding-discovery — wire scribe→variant loop
 - **Status:** partially_adopted
 - **Spec detail:** partial
 - **Spec:** `grimoire/flows/finding discovery.md`
-- **Dependencies:** agent:scribe (done), skill:scribe-distill (done)
+- **Dependencies:** agent:scribe (done), skill:scribe-distill (done), agent:sigil (done)
 - **Tasks:**
-  1. Update finding-draft step 6 to suggest variant sigil spawn if pattern is generalizable
-  2. Wire scribe-distill output to variant sigil spawn prompt (step 8-9)
+  1. Update finding-draft step 6 to more strongly recommend the scribe-distill → checks → sigil pipeline
+  2. Wire scribe-distill output to variant sigil spawn prompt (steps 8-9)
   3. Add explicit "run new check against codebase immediately" step to scribe-distill
+  4. Consider post-finding hook that prompts researcher to distill the pattern
 
-### 8. flow:autonomous-discovery — complete pipeline
-- **Status:** partially_adopted (wired in summon step 9, but loop incomplete)
+### 8. flow:autonomous-discovery — standalone sigil invocation
+- **Status:** partially_adopted (wired in summon step 9, but no mid-engagement access)
 - **Spec detail:** partial
 - **Spec:** `grimoire/flows/autonomous discovery.md`
-- **Dependencies:** agent:gnome (done), agent:sigil (done), agent:familiar (done)
+- **Dependencies:** agent:sigil (done), agent:familiar (done), agent:gnome (done)
 - **Tasks:**
-  1. Wire familiar → variant sigil spawn after confirming a finding
-  2. Document full autonomous-discovery cycle as a reference
+  1. Implement a standalone sigil-invocation skill for mid-engagement use (e.g., "run sigils on this directory")
+  2. Wire familiar → variant sigil spawn after confirming a finding
+  3. Document full autonomous-discovery cycle as a reference
 
 ### 9. skill:slither
 - **Status:** not_implemented
-- **Spec detail:** partial
+- **Spec detail:** sketch
 - **Spec:** `grimoire/skills/sigils/slither.md`
 - **Dependencies:** None
 - **Tasks:**
   1. Create `skills/slither/` directory with SKILL.md
   2. Build references covering detector anatomy, documentation requirements, napalm integration
   3. Create worked examples
-  4. Wire into sigil Mode 3 as super-sigil runner
+  4. Wire into gnome Mode 3 (build slither detector) as the primary skill reference
 
-### 10. agent:sigil — super-sigil (Mode 3)
-- **Status:** partial (Modes 1-2 done)
-- **Spec detail:** detailed
-- **Spec:** `grimoire/agents/sigil.md`
+### 10. agent:sigil-super (Mode 3)
+- **Status:** not_implemented
+- **Spec detail:** sketch
+- **Spec:** `grimoire/agents/sigil.md` ("Super Sigils" section)
 - **Dependencies:** skill:semgrep (#2), skill:slither (#9)
 - **Tasks:**
-  1. Implement super-sigil pattern: semgrep/slither runners spawning validation sigils
+  1. Implement super-sigil pattern: tool runner that runs semgrep/slither once, then spawns individual validation sigils per finding
 
-### 11. infra:personal-grimoire — full structure
-- **Status:** partial
-- **Spec detail:** partial
+### 11. skill:summon — terminology reconciliation
+- **Status:** implemented (terminology drift)
+- **Spec detail:** detailed
+- **Spec:** `grimoire/skills/summon.md`
+- **Dependencies:** None
+- **Tasks:**
+  1. Resolve `sigils/` vs `spells/` terminology drift between spec and implementation directory structure
+  2. Make `select-checks.sh` gracefully handle missing `index-checks.sh` dependency (currently fails if checks skill absent)
+  3. Add `tomes/` to the spec's directory structure if it is intended to be canonical
+  4. Consider auto-including personal grimoire sigils in the swarm (currently only suggests scribe-gc)
+
+### 12. infra:personal-grimoire — full structure
+- **Status:** partial (referenced via mkdir -p, no initialization)
+- **Spec detail:** sketch
 - **Spec:** `grimoire/concepts/personal grimoire.md`, `grimoire/agents/scribe.md`
 - **Dependencies:** agent:scribe (done)
 - **Tasks:**
-  1. Define full ~/.grimoire/ directory structure (sigils/, knowledge/, gadgets/)
-  2. Implement end-of-audit merge workflow in scribe-distill
-  3. Add personal grimoire query to scribe-utilities
+  1. Define full `~/.grimoire/` directory structure: `sigils/`, `knowledge/`, `sigils/archived/`
+  2. Create initialization workflow (currently relies on scattered `mkdir -p` across skills)
+  3. Implement end-of-audit merge as a concrete workflow step in scribe-distill or standalone skill
 
-### 12. infra:spellbook — user-facing documentation
-- **Status:** partial
+### 13. infra:spellbook — terminology reconciliation
+- **Status:** partial (conceptual alias for personal grimoire)
 - **Spec detail:** partial
 - **Spec:** `grimoire/agents/scribe.md`
 - **Dependencies:** agent:scribe (done)
 - **Tasks:**
-  1. Add user-facing explanation of spellbook concept to scribe skills or a shared reference
+  1. Clarify terminology: is "spellbook" the umbrella concept (project-local + personal grimoire) or specifically the personal grimoire?
+  2. Add user-facing explanation of spellbook concept to a shared reference
 
-### 13. infra:tomes — format guidance
-- **Status:** partial
-- **Spec detail:** partial
+### 14. infra:tomes — content lifecycle
+- **Status:** partial (directory created by summon, no management skill)
+- **Spec detail:** sketch
 - **Spec:** `grimoire/skills/summon.md`, `grimoire/ideas/todo.md`
 - **Dependencies:** None
 - **Tasks:**
-  1. Create format guidance doc for tomes
-  2. Add "when to create a tome" guidance to summon
+  1. Define tomes format (frontmatter, content structure)
+  2. Create tomes management guidance (when to create, fact-checking before adding)
+  3. Add "when to create a tome" guidance to summon and cartography
+  4. Consider librarian integration for surfacing relevant tomes
+
+### 15. concept:original-sin — explicit in skills
+- **Status:** adopted (implicit through confirmation gates)
+- **Spec detail:** detailed
+- **Dependencies:** None
+- **Tasks:**
+  1. Add brief philosophy note to cartography family reminding that these tools surface data but don't replace judgment
+  2. Consider shared preamble or cross-reference for the original-sin principle
 
 ## Cross-Cutting Adoption
 
 | Concept/Flow | Adoption | Touches | Recommendations |
 |---|---|---|---|
-| **concept:trivial-verifiability** | partially_adopted | write-poc, familiar, sigil, checks | Add falsifiable-vs-verifiable distinction (Priority Queue #3) |
-| **concept:the-original-sin** | adopted | All skills/agents | Add explicit friction-removal language (Priority Queue #5) |
-| **concept:backpressure** | adopted (principle) | sigil, checks, write-poc, summon | Implement tool skills + add enforcement (Priority Queue #4) |
-| **concept:hypothesis-generation** | adopted | write-poc, cartography, sigil, familiar | Add seeded/unseeded guidance (Priority Queue #6) |
-| **concept:context-building** | partially_adopted | summon, cartography, sigil, write-poc | **Gadgets completely missing** (Priority Queue #1) |
-| **concept:agent-context** | adopted | All agents | Context hygiene practiced; explicit docs optional |
-| **concept:don't-get-in-the-way** | adopted | All skills/agents | Exploration-over-storage implicit; explicit docs optional |
-| **concept:personal-grimoire** | partially_adopted | scribe, scribe-distill, summon | Structure incomplete (Priority Queue #11) |
-| **flow:autonomous-discovery** | partially_adopted | sigil, familiar, librarian, gnome, scribe | Gnome done; variant loop not wired (Priority Queue #8) |
-| **flow:finding-discovery** | partially_adopted | finding-draft, scribe-distill, sigil | scribe→variant sigil not automatic (Priority Queue #7) |
+| **concept:trivial-verifiability** | adopted | write-poc, familiar, sigil, checks | Add falsifiable-vs-verifiable distinction (#5) |
+| **concept:agent-context** | adopted | All agents | Context hygiene thoroughly practiced |
+| **concept:what-is-grimoire** | adopted | Plugin design broadly | Consider orientation mechanism for new users |
+| **concept:personal-grimoire** | adopted | scribe, scribe-distill, summon | End-of-audit merge not concrete (#12) |
+| **concept:don't-get-in-the-way** | adopted | All skills/agents | "Exploration over stored summaries" not explicitly stated |
+| **concept:the-original-sin** | partially_adopted | All skills/agents | Not named; missing from mechanical skills (#15) |
+| **concept:backpressure** | partially_adopted | sigil (core principle), checks, write-poc | Semgrep/slither needed for enforcement (#4) |
+| **concept:hypothesis-generation** | partially_adopted | write-poc, cartography, sigil, familiar | No associative surfacing; no ralph loop (#6) |
+| **concept:context-building** | partially_adopted | summon, cartography, sigil, write-poc | **Gadgets completely missing** (#1) |
+| **flow:autonomous-discovery** | partially_adopted | sigil, familiar, librarian, gnome, scribe | No standalone mid-engagement sigil invocation (#8) |
+| **flow:finding-discovery** | partially_adopted | finding-draft, scribe-distill, sigil | scribe→variant loop not wired (#7) |
 
 ## Implementation Debt
 
@@ -160,11 +191,8 @@ Skills that work but lack structural depth compared to mature peers (write-poc, 
 | **scribe-distill** | SKILL.md, references/ (2 files) | examples/, scripts/ | Medium |
 | **scribe-gc** | SKILL.md | references/, examples/, scripts/ | Low |
 | **scribe-utilities** | SKILL.md | references/, examples/, scripts/ | Low |
-| **finding-draft** | SKILL.md | references/, examples/, scripts/ | Medium |
-| **finding-review** | SKILL.md | references/, examples/, scripts/ | Medium |
-| **finding-dedup** | SKILL.md | references/, examples/, scripts/ | Low |
 
-Note: finding-draft/review/dedup load the base `finding` skill (which has full references/examples/scripts), so their own structural gaps are less critical — they inherit supporting material.
+Note: finding-draft, finding-review, and finding-dedup are SKILL.md-only but deliberately delegate to the base `finding` skill for shared references/examples/scripts. This is architecturally sound — not debt.
 
 ## Needs Spec Work
 
@@ -174,16 +202,12 @@ Items with `sketch` spec detail requiring answers before implementation.
 - No spec file exists at `grimoire/skills/sigils/codeql.md`
 - Which languages to support initially?
 - What query patterns to focus on?
+- How does it relate to the existing checks format?
 
 ### skill:triage
 - Mentioned in roadmap (`grimoire/ideas/notes.md`)
-- What is triage as a skill vs familiar agent triage? Overlap?
-- What specific assessment framework?
-
-### skill:finding-utilities
-- Brief mention in `grimoire/skills/finding.md`
-- What specific utilities beyond index-findings.sh?
-- Search, stats, filtering?
+- What is triage as a skill vs familiar agent triage? Is this absorbed by the familiar?
+- What specific assessment framework beyond familiar's verify/dismiss/adjust?
 
 ### agent:imp
 - Spec: brief mention in `grimoire/ideas/notes.md` and `grimoire/ideas/todo.md`
@@ -206,23 +230,34 @@ Items with `sketch` spec detail requiring answers before implementation.
 - Target audience? Format (single guide vs blog series)?
 - Content scope (all skills or beginner subset)?
 
+### Sketch-only roadmap items (no spec files)
+- skill:identify, skill:context, skill:scoping, skill:flow, skill:report, skill:enscribe
+- These appear in `grimoire/ideas/notes.md` as roadmap bullets with no further detail
+
 ## Completed
 
-Items with status `implemented` and no remaining tasks (0 debt, 0 cross-cutting gaps).
+Items with status `implemented` and no remaining tasks.
 
-- **skill:finding** — Base knowledge skill. SKILL.md + references + examples + scripts. Full spec coverage.
-- **skill:review-cartography** — 6-step verification workflow. Full supporting structure. 0 debt.
-- **skill:gc-cartography** — 6-step GC workflow. Full supporting structure. 0 debt.
-- **agent:librarian** — External research agent. 2 modes, 6-tier source priority, citation format. 12/16 spec requirements (4 gaps are environment-specific MCP configs).
-- **agent:scribe** — Detection module builder. 3 modes, skills suite (distill/gc/utilities). 47/53 spec requirements.
-- **agent:familiar** — QA gatekeeper. 3 modes, personality customization. 15/15 spec requirements.
+- **skill:write-poc** — 5-phase workflow, 10 reference docs, 4 examples, validation script. Exceeds spec. 0 debt.
+- **skill:finding** — Base knowledge skill. SKILL.md + 3 references + 3 examples + 2 scripts. Full spec coverage.
+- **skill:finding-draft** — 7-step workflow. Delegates to finding base for references. 0 debt.
+- **skill:finding-review** — 4-step workflow. All 5 review dimensions from spec covered. 0 debt.
+- **skill:finding-dedup** — 4-step workflow. Extends spec with 3-class model. 0 debt.
+- **skill:finding-utilities** — Absorbed into finding/scripts/ (index-findings.sh, validate-finding.sh). 0 debt.
+- **skill:checks** — 8-step workflow, 2 references, 5 examples, 2 scripts. Full pattern profile. 0 debt.
+- **skill:review-cartography** — 6-step workflow, references, examples, scripts. 0 debt.
+- **skill:gc-cartography** — 6-step workflow, 2 references, 1 example, 4 scripts. Most robust skill. 0 debt.
+- **agent:librarian** — External research agent. 2 modes, MCP tools (claudit) wired, citation-backed. Auto-discovered.
+- **agent:familiar** — QA gatekeeper. 3 modes (finding triage, batch triage, PoC review). Skeptical verifier. Auto-discovered.
+- **agent:scribe** — Detection module builder. 3 modes (distill, spellbook management, query). Auto-discovered.
+- **agent:gnome** — Worker agent. 4 modes (check, semgrep rule, slither detector, PoC). Auto-discovered.
+- **agent:sigil** — Vulnerability hunter. 2 modes (single-target hunt, variant analysis). Backpressure as core principle. Auto-discovered.
 - **infra:audit-directory-structure** — Fully specified in summon SKILL.md step 2.
-- **infra:cartography-files** — Format, indexing script, and examples. Complete.
-- **infra:finding-files** — Frontmatter schema, filing conventions. Complete.
-- **infra:check-files** — Format and design principles documented. Complete.
-- **infra:grimoire-file-format** — Living document format. Complete.
+- **infra:cartography-files** — Format spec, indexing script, conditional sections. Complete.
+- **infra:finding-files** — Frontmatter schema, filing conventions, validation script. Complete.
+- **infra:check-files** — Format spec, design principles, validation script. Complete.
+- **infra:grimoire-file-format** — Living document format with bloat check. Complete.
+- **infra:cartography-indexing** — Index script with edge case handling. Complete.
 - **concept:what-is-grimoire** — Covered by README.md and plugin design.
 - **concept:agent-context** — Subagent patterns used throughout all implemented skills/agents.
-- **concept:don't-get-in-the-way** — Exploration-first approach in cartography and summon. Minimalism practiced.
-- **agent:gnome** — Worker agent for isolated task execution. 4 modes (build check, semgrep rule, slither detector, PoC). Plan-based execution with verification-first building, context isolation, merge-before-create strategy. Scribe and scribe-distill updated to delegate to gnome. 8/8 spec requirements covered.
-- **infra:readme-update** — README.md updated: Familiar, Scribe, Gnome marked as Implemented.
+- **concept:don't-get-in-the-way** — Exploration-first approach in cartography and summon.
