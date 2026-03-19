@@ -1,25 +1,10 @@
 # Grimoire Implementation Plan
 
-_Generated: 2026-03-19 · Updated: 2026-03-19 (implemented librarian-initialize)_
+_Generated: 2026-03-19 · Updated: 2026-03-19 (implemented modify-library)_
 
 ---
 
 ## Priority Queue
-
-### Tier 1: Not Implemented (clear spec)
-
-**1. `skill:modify-library` — not_implemented**
-- Spec detail: partial (single-vs-split question resolved; validation still open)
-- Spec source: `grimoire/agents/librarian.md` (§Add Library)
-- Tasks:
-  - Create `skills/modify-library/SKILL.md` as a **single** skill (spec confirms: "This single skill will trigger whenever you ask the librarian to change the grimoire libraries")
-  - Workflow: parse intent (add/remove/change) → validate source (git clone --dry-run or symlink target exists) → update `libraries.yaml` → confirm
-  - Support `type: git` (git URL) and `type: symlink` (local path) entries
-  - Add `examples/` showing add-git-library and add-symlink-library operations on `libraries.yaml`
-- Dependencies: `infra:librarian-library` (initialize must have run first)
-- Notes: Spec uses name `modify-library` (single skill, not split). Open question: exact git URL validation approach (dry-run clone vs. regex check vs. `git ls-remote`).
-
----
 
 ### Tier 2: Shallow Skills (structural depth)
 
@@ -172,15 +157,17 @@ Skills with `shallow` status — SKILL.md files are thorough but lack the struct
 - ~~Should it detect an already-initialized directory?~~ Resolved: Yes, upgrade in place.
 - ~~What constitutes a "library structure upgrade"?~~ Resolved: Check all four components (root, library/, cache/, libraries.yaml) individually; create only absent ones. No versioning needed.
 
-**`skill:modify-library`** (partial — one question remains)
-- ~~Single skill or split?~~ **Resolved:** Single skill — spec states "This single skill will trigger whenever you ask the librarian to change the grimoire libraries" (commit dad2c2d).
-- Remaining open: What git URL validation should be applied? Options: `git ls-remote`, clone dry-run, or lightweight regex. Symlink validation is straightforward (`test -d`).
+**`skill:modify-library`** — ~~all questions resolved; skill implemented~~
+- ~~Single skill or split?~~ **Resolved:** Single skill.
+- ~~Git URL validation approach?~~ **Resolved:** `git ls-remote` — lightweight network check, no clone needed.
 
 ---
 
 ## Completed
 
 Items with status `implemented` and no remaining tasks:
+
+- `skill:modify-library` — `skills/modify-library/`: 4-step workflow (parse intent → validate → apply → report), handles add/remove/change operations on `libraries.yaml`. Validates git URLs via `git ls-remote` and symlink paths via `test -d`. Guards against missing/corrupt YAML, duplicate names, and absent entries. Includes `examples/add-git-library.md` and `examples/add-symlink-library.md`. Git validation resolved as `git ls-remote` (lightweight, no clone).
 
 - `skill:librarian-initialize` — `skills/librarian-initialize/`: 4-step workflow (detect state → plan → apply missing → report), handles fresh install and upgrade-in-place, never overwrites existing `libraries.yaml`. Includes `examples/fresh-install.md` and `examples/upgrade-run.md`. "Upgrade" resolved as: check all four expected components individually and create only absent ones.
 
