@@ -43,7 +43,7 @@ each task in_progress before starting it and completed when done.
 ```
 - [ ] 1. Parse intent — identify operation, library name, type, and source
 - [ ] 2. Validate — check prerequisites and verify the source is reachable
-- [ ] 3. Apply — update libraries.yaml
+- [ ] 3. Apply — update libraries.yaml; clone git libraries into library/
 - [ ] 4. Report — confirm the change
 ```
 
@@ -218,22 +218,64 @@ EOF
 If the Python script exits with an error, report the error and stop. Do not
 attempt to repair the file manually.
 
+**For `add` with `type: git` — clone the repository:**
+
+After writing `libraries.yaml`, clone the repository into the library directory:
+
+```bash
+git clone <source> ~/.grimoire/librarian/library/<library-name>
+```
+
+If the clone fails, remove the entry from `libraries.yaml` to keep the index
+consistent with what is actually present on disk:
+
+```bash
+python3 - <<'EOF'
+import yaml, os
+
+path = os.path.expanduser('~/.grimoire/librarian/library/libraries.yaml')
+with open(path) as f:
+    data = yaml.safe_load(f) or {}
+
+libs = data.get('libraries') or {}
+libs.pop('<library-name>', None)
+data['libraries'] = libs
+
+with open(path, 'w') as f:
+    yaml.dump(data, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+
+print('rolled back')
+EOF
+```
+
+Then report the clone error to the user and stop.
+
 ### 4. Report
 
 Confirm the operation clearly.
 
-Example add report:
+Example add report (git library):
 
-> Added `smart-contract-vulnerabilities` to the library index:
+> Added `smart-contract-vulnerabilities` to the library index and cloned it to
+> `~/.grimoire/librarian/library/smart-contract-vulnerabilities/`:
 >
 > ```yaml
 > type: git
 > source: git@github.com:kadenzipfel/smart-contract-vulnerabilities.git
 > ```
 >
-> The librarian will use this library when answering questions about smart
-> contract vulnerabilities. To fetch it into the local library directory, ask
-> the librarian to pull its libraries.
+> The library is ready to use.
+
+Example add report (symlink library):
+
+> Added `security-notes` to the library index:
+>
+> ```yaml
+> type: symlink
+> source: /Users/alice/security-notes
+> ```
+>
+> The librarian will read directly from `/Users/alice/security-notes`.
 
 Example remove report:
 

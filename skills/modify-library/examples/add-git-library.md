@@ -66,6 +66,8 @@ Exit code 0. The repository is reachable and valid.
 
 ### Step 3 — Apply
 
+**Write to libraries.yaml:**
+
 ```bash
 $ python3 - <<'EOF'
 import yaml, os
@@ -90,6 +92,18 @@ EOF
 done
 ```
 
+**Clone the repository:**
+
+```bash
+$ git clone git@github.com:kadenzipfel/smart-contract-vulnerabilities.git \
+    ~/.grimoire/librarian/library/smart-contract-vulnerabilities
+Cloning into '/Users/alice/.grimoire/librarian/library/smart-contract-vulnerabilities'...
+remote: Enumerating objects: 847, done.
+remote: Counting objects: 100% (847/847), done.
+remote: Compressing objects: 100% (412/412), done.
+Receiving objects: 100% (847/847), 1.23 MiB | 2.10 MiB/s, done.
+```
+
 `libraries.yaml` now contains:
 
 ```yaml
@@ -99,17 +113,18 @@ libraries:
     source: git@github.com:kadenzipfel/smart-contract-vulnerabilities.git
 ```
 
+The repository is present at `~/.grimoire/librarian/library/smart-contract-vulnerabilities/`.
+
 ---
 
 ### Step 4 — Report
 
-> Added `smart-contract-vulnerabilities` to the library index:
+> Added `smart-contract-vulnerabilities` to the library index and cloned it to
+> `~/.grimoire/librarian/library/smart-contract-vulnerabilities/`:
 >
 > ```yaml
 > type: git
 > source: git@github.com:kadenzipfel/smart-contract-vulnerabilities.git
 > ```
 >
-> The librarian will use this library when answering questions about smart
-> contract vulnerabilities. To fetch it into the local library directory, ask
-> the librarian to pull its libraries.
+> The library is ready to use.

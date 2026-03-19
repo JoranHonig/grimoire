@@ -95,10 +95,20 @@ libraries:
     source: git@github.com:kadenzipfel/smart-contract-vulnerabilities.git
 ```
 
-For each library entry, the repository is cloned at `~/.grimoire/librarian/library/<name>/`.
-Before reading a library, run `git -C ~/.grimoire/librarian/library/<name> pull` to ensure
-it is current. These are maintained knowledge bases — treat them as authoritative references,
-not transient cache.
+For each library entry with `type: git`, the repository should be present at
+`~/.grimoire/librarian/library/<name>/`. Before reading a library, check whether it is
+already cloned:
+
+```bash
+[ -d ~/.grimoire/librarian/library/<name>/.git ] \
+  && echo "cloned" || echo "not cloned"
+```
+
+- **Not cloned:** clone it now: `git clone <source> ~/.grimoire/librarian/library/<name>`
+- **Already cloned:** pull to ensure it is current: `git -C ~/.grimoire/librarian/library/<name> pull`
+
+These are maintained knowledge bases — treat them as authoritative references, not transient
+cache. Do not delete them.
 
 Use local knowledge bases alongside web sources (priority 3 and 4 above) when they cover the
 topic. They often contain curated vulnerability patterns, best practices, and historical
