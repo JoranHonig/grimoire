@@ -1,16 +1,29 @@
 # Grimoire Implementation Plan
 
-_Generated: 2026-03-19_
+_Generated: 2026-03-19 · Updated: 2026-03-19 (implemented librarian-initialize)_
 
 ---
 
 ## Priority Queue
 
+### Tier 1: Not Implemented (clear spec)
+
+**1. `skill:modify-library` — not_implemented**
+- Spec detail: partial (single-vs-split question resolved; validation still open)
+- Spec source: `grimoire/agents/librarian.md` (§Add Library)
+- Tasks:
+  - Create `skills/modify-library/SKILL.md` as a **single** skill (spec confirms: "This single skill will trigger whenever you ask the librarian to change the grimoire libraries")
+  - Workflow: parse intent (add/remove/change) → validate source (git clone --dry-run or symlink target exists) → update `libraries.yaml` → confirm
+  - Support `type: git` (git URL) and `type: symlink` (local path) entries
+  - Add `examples/` showing add-git-library and add-symlink-library operations on `libraries.yaml`
+- Dependencies: `infra:librarian-library` (initialize must have run first)
+- Notes: Spec uses name `modify-library` (single skill, not split). Open question: exact git URL validation approach (dry-run clone vs. regex check vs. `git ls-remote`).
+
 ---
 
 ### Tier 2: Shallow Skills (structural depth)
 
-**4. `skill:scribe-distill` — shallow**
+**2. `skill:scribe-distill` — shallow**
 - Spec detail: detailed
 - Evidence: `skills/scribe-distill/SKILL.md` + `references/` (2 files); no `examples/`, `scripts/`
 - Tasks:
@@ -18,38 +31,51 @@ _Generated: 2026-03-19_
   - Add `scripts/validate-distill.sh` or reference `checks/scripts/validate-check.sh`
 - Notes: Central to the automation workflow (finding → detector pipeline); highest-leverage shallow skill
 
-**5. `skill:finding-draft` — shallow**
+**3. `skill:finding-draft` — shallow**
 - Spec detail: detailed
 - Evidence: `skills/finding-draft/SKILL.md` only; no supporting dirs
 - Tasks:
-  - SKILL.md already delegates format/examples to `skills/finding/` — verify cross-references work
-  - No urgent need for standalone `references/` since it fully delegates to the base finding skill
+  - SKILL.md delegates format/examples to `skills/finding/` — verify cross-references work
+  - Add falsifiable-vs-verifiable framing note (concept:trivial-verifiability adoption)
+- Notes: No urgent need for standalone `references/` since it fully delegates to base finding skill
 
-**6. `skill:finding-review` — shallow**
+**4. `skill:finding-review` — shallow**
 - Spec detail: detailed
 - Evidence: `skills/finding-review/SKILL.md` only; no supporting dirs
 - Tasks:
   - Add `examples/` with a before/after review showing a finding improved by the skill
 
-**7. `skill:finding-dedup` — shallow**
+**5. `skill:finding-dedup` — shallow**
 - Spec detail: detailed
 - Evidence: `skills/finding-dedup/SKILL.md` only; no supporting dirs
 - Tasks:
-  - `finding/examples/dedup-scenario.md` exists — verify the SKILL.md reference to it works
+  - Verify SKILL.md reference to `finding/examples/dedup-scenario.md` works
   - No additional examples needed if that scenario is sufficient
 
-**8. `skill:scribe-gc` — shallow**
+**6. `skill:scribe-gc` — shallow**
 - Spec detail: detailed
 - Evidence: `skills/scribe-gc/SKILL.md` only; no supporting dirs
 - Tasks:
   - Add `examples/` with a before/after GC scenario (overlapping sigils → merged result)
 
-**9. `skill:scribe-utilities` — shallow**
+**7. `skill:scribe-utilities` — shallow**
 - Spec detail: detailed
 - Evidence: `skills/scribe-utilities/SKILL.md` only; no supporting dirs
 - Tasks:
-  - Low urgency: read-only utility skill; SKILL.md is comprehensive
   - Add `examples/` showing sample output for list/stats/search operations
+
+---
+
+### Tier 3: Cross-Cutting Adoption Tasks
+
+**8. `concept:backpressure` — partially adopted**
+- Tasks:
+  - Add a brief backpressure framing note to `checks/SKILL.md` philosophy section
+  - Implement semgrep/slither when spec is ready (those are the remaining back-pressure mechanisms)
+
+**9. `concept:hypothesis-generation` — not adopted**
+- Tasks:
+  - Add a brief note to `summon/SKILL.md` and `finding-draft/SKILL.md` about seeded vs. unseeded hypothesis generation
 
 ---
 
@@ -59,13 +85,13 @@ _Generated: 2026-03-19_
 - Touches: write-poc, checks, scribe-distill, semgrep (unbuilt), slither (unbuilt)
 - Adopted: write-poc (PoC enforces verification), scribe-distill (produces runnable detectors)
 - Gaps: `checks/SKILL.md` doesn't explicitly frame backpressure; semgrep/slither unbuilt
-- Recommendation: Add a brief backpressure framing note to `checks/SKILL.md` philosophy section; implement semgrep/slither when spec is ready
+- Recommendation: Add backpressure framing to `checks/SKILL.md`; implement semgrep/slither when spec is ready
 
 **`concept:trivial-verifiability`** — partially_adopted
 - Touches: finding-draft, checks, write-poc, scribe-distill
 - Adopted: write-poc (requires runnable PoC)
 - Gaps: Not explicitly surfaced in finding-draft or checks
-- Recommendation: Add a "falsifiable vs verifiable" framing note to `checks/SKILL.md` philosophy section
+- Recommendation: Add falsifiable-vs-verifiable framing note to `finding-draft/SKILL.md`
 
 **`concept:context-building`** — partially_adopted
 - Touches: cartography, summon, librarian
@@ -76,9 +102,9 @@ _Generated: 2026-03-19_
 **`concept:hypothesis-generation`** — not_adopted
 - Touches: finding-draft, summon, sigil
 - Gaps: No skill explicitly frames the researcher hypothesis loop
-- Recommendation: Add a brief note to summon and finding-draft about seeded vs unseeded hypothesis generation
+- Recommendation: Add seeded vs. unseeded hypothesis generation note to summon and finding-draft
 
-**`concept:original-sin`** — partially_adopted
+**`concept:the-original-sin`** — partially_adopted
 - Touches: all skills
 - Adopted: philosophy sections in write-poc and checks resist cognitive offloading
 - Acceptable: embedded in "verify before trusting" guidance throughout
@@ -91,7 +117,8 @@ _Generated: 2026-03-19_
 
 **`concept:personal-grimoire`** — partially_adopted
 - `~/.grimoire/sigils/` and `~/.grimoire/knowledge/` referenced in scribe-gc and scribe-utilities
-- `~/.grimoire/librarian/` not yet implemented (active work item above)
+- `~/.grimoire/librarian/` partially implemented (cache documented, library management skills pending)
+- Recommendation: Implement librarian-initialize and modify-library skills
 
 **`flow:finding-discovery`** — adopted
 - write-poc → finding-draft → scribe-distill chain wired; all participants exist
@@ -113,6 +140,7 @@ Skills with `shallow` status — SKILL.md files are thorough but lack the struct
 | `skill:scribe-distill` | has `references/`; missing `examples/`, `scripts/` |
 | `skill:scribe-gc` | no `references/`, `examples/`, `scripts/` |
 | `skill:scribe-utilities` | no `references/`, `examples/`, `scripts/` |
+| `skill:librarian-clean-cache` | no `references/`, `examples/`, `scripts/` (low priority — simple skill) |
 
 ---
 
@@ -139,14 +167,25 @@ Skills with `shallow` status — SKILL.md files are thorough but lack the struct
   - How does compaction work (when to create vs extend vs replace a tome)?
   - How does the librarian surface relevant tomes to other agents?
 
+**`skill:librarian-initialize`** — ~~all questions resolved; skill implemented~~
+- ~~Should the skill also create `cache/`?~~ Resolved: Yes.
+- ~~Should it detect an already-initialized directory?~~ Resolved: Yes, upgrade in place.
+- ~~What constitutes a "library structure upgrade"?~~ Resolved: Check all four components (root, library/, cache/, libraries.yaml) individually; create only absent ones. No versioning needed.
+
+**`skill:modify-library`** (partial — one question remains)
+- ~~Single skill or split?~~ **Resolved:** Single skill — spec states "This single skill will trigger whenever you ask the librarian to change the grimoire libraries" (commit dad2c2d).
+- Remaining open: What git URL validation should be applied? Options: `git ls-remote`, clone dry-run, or lightweight regex. Symlink validation is straightforward (`test -d`).
+
 ---
 
 ## Completed
 
 Items with status `implemented` and no remaining tasks:
 
-- `agent:librarian` — Updated `agents/librarian.md`: fixed cache path (`/tmp/librarian-repos/` → `~/.grimoire/librarian/cache/`), added Local Knowledge Bases section (libraries.yaml format, git pull freshness, library vs cache distinction), added Cache Management section documenting the two-directory model and referencing `librarian-clean-cache`
-- `skill:librarian-clean-cache` — Created `skills/librarian-clean-cache/SKILL.md`: 4-step workflow (inspect → confirm → remove → report), todo-list wrapper, edge case handling for missing/empty cache, guidelines section
+- `skill:librarian-initialize` — `skills/librarian-initialize/`: 4-step workflow (detect state → plan → apply missing → report), handles fresh install and upgrade-in-place, never overwrites existing `libraries.yaml`. Includes `examples/fresh-install.md` and `examples/upgrade-run.md`. "Upgrade" resolved as: check all four expected components individually and create only absent ones.
+
+- `agent:librarian` — `agents/librarian.md`: fixed cache path, added Local Knowledge Bases section (libraries.yaml format, git pull freshness, library vs cache distinction), Cache Management section documenting the two-directory model and referencing `librarian-clean-cache`
+- `skill:librarian-clean-cache` — `skills/librarian-clean-cache/SKILL.md`: 4-step workflow (inspect → confirm → remove → report), edge case handling for missing/empty cache, safety guidelines (never touches library/)
 - `infra:librarian-cache` + `infra:librarian-library` — Documented in `agents/librarian.md`: `~/.grimoire/librarian/` layout, `libraries.yaml` format (type: git, source: url), cache (transient) vs library (maintained) distinction
 
 - `skill:write-poc` — Full structure (SKILL.md + 4 examples + 10 references + 1 script)
