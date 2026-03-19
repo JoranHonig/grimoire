@@ -127,19 +127,21 @@ To get the current branch (needed for file links):
 git -C ~/.grimoire/librarian/library/<name> rev-parse --abbrev-ref HEAD
 ```
 
-Then construct the full file URL:
-```
-https://github.com/<owner>/<repo>/blob/<branch>/<relative-path-within-repo>
-```
+Then construct the URL using the appropriate GitHub path prefix:
 
-For example, if the local path is
-`~/.grimoire/librarian/library/smart-contract-vulnerabilities/docs/overflow.md`
-and the branch is `main`, the citation is:
+- **File:** `https://github.com/<owner>/<repo>/blob/<branch>/<relative-path>`
+- **Directory:** `https://github.com/<owner>/<repo>/tree/<branch>/<relative-path>`
+
+For example, with branch `main`:
 ```
+# citing a file
 https://github.com/kadenzipfel/smart-contract-vulnerabilities/blob/main/docs/overflow.md
+
+# citing a directory
+https://github.com/kadenzipfel/smart-contract-vulnerabilities/tree/main/docs/
 ```
 
-If you know a specific line number, append `#L<n>` (or `#L<start>-L<end>` for a range).
+If you know a specific line number, append `#L<n>` (or `#L<start>-L<end>` for a range) to file links.
 
 Apply the same URL conversion for repositories cloned into `cache/` when the remote is
 GitHub. Use `git -C <clone-dir> remote get-url origin` to retrieve the source URL for
@@ -191,8 +193,9 @@ Each factual claim has an inline citation [source: <navigable-url>].
 **Citation URL rules:**
 - Always use `https://` URLs — never local file paths. If content came from a local clone,
   convert it to its GitHub URL as described in the Local Knowledge Bases section.
-- For GitHub files, prefer deep links to the specific file and line:
-  `https://github.com/<owner>/<repo>/blob/<branch>/<path>#L<n>`
+- For GitHub content, use deep links with the correct prefix:
+  - file: `https://github.com/<owner>/<repo>/blob/<branch>/<path>#L<n>`
+  - directory: `https://github.com/<owner>/<repo>/tree/<branch>/<path>`
 - For web pages, use the canonical URL of the page or section.
 - If no navigable URL exists for a source (e.g. a PDF with no public URL), use the local
   path prefixed with `file://` so it is at least clickable in supported terminals.
