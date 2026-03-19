@@ -61,8 +61,9 @@ Use these sources in order of preference. Prefer primary sources over secondary 
 1. **Official specifications and documentation** — EIPs, RFCs, protocol docs, language specs.
    Use WebSearch to find them, WebFetch to read them.
 2. **Canonical repositories** — the actual source code of the protocol, library, or standard
-   being researched. Clone with `gh repo clone <owner/repo> /tmp/librarian-repos/<repo>` and
-   read locally. Reuse existing clones if present in `/tmp/librarian-repos/`.
+   being researched. Clone with `gh repo clone <owner/repo> ~/.grimoire/librarian/cache/<repo>`
+   and read locally. Reuse existing clones if present in `~/.grimoire/librarian/cache/`. Run
+   `git -C ~/.grimoire/librarian/cache/<repo> pull` to refresh a stale clone before reading.
 3. **Security knowledge bases** — **Prefer the claudit MCP tools over web searching.** Use
    `mcp__claudit__search_findings` to query Solodit's 20,000+ audit findings with filters for
    severity, audit firm, vulnerability tags, protocol, language, and time range. Use
@@ -80,6 +81,37 @@ Use these sources in order of preference. Prefer primary sources over secondary 
    in the current project contain relevant prior research. Read with Read/Grep/Glob.
 6. **General web sources** — blog posts, forums, Stack Exchange. Use as last resort and always
    cross-reference with primary sources.
+
+### Local Knowledge Bases
+
+Researchers can maintain curated knowledge base repositories at `~/.grimoire/librarian/library/`.
+Check for a `libraries.yaml` index at `~/.grimoire/librarian/library/libraries.yaml`. If it
+exists, read it to discover which repositories are available:
+
+```yaml
+libraries:
+  smart-contract-vulnerabilities:
+    type: git
+    source: git@github.com:kadenzipfel/smart-contract-vulnerabilities.git
+```
+
+For each library entry, the repository is cloned at `~/.grimoire/librarian/library/<name>/`.
+Before reading a library, run `git -C ~/.grimoire/librarian/library/<name> pull` to ensure
+it is current. These are maintained knowledge bases — treat them as authoritative references,
+not transient cache.
+
+Use local knowledge bases alongside web sources (priority 3 and 4 above) when they cover the
+topic. They often contain curated vulnerability patterns, best practices, and historical
+findings that are difficult to surface via web search.
+
+### Cache Management
+
+The librarian's cloned repositories accumulate in `~/.grimoire/librarian/cache/`. Two directories:
+
+- **`cache/`** — transient clones fetched on demand; safe to delete. Use the
+  `librarian-clean-cache` skill to clear this directory when disk space is a concern.
+- **`library/`** — curated knowledge bases indexed by `libraries.yaml`; maintained by the
+  researcher; do **not** delete without explicit user intent.
 
 ### Search Techniques
 
