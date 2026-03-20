@@ -45,7 +45,7 @@ Ask or infer which collections to query:
 - **Project-local** (`grimoire/spells/checks/` and `grimoire/spells/knowledge/`)
 - **Both** (default)
 
-If `~/.grimoire/sigils/` does not exist, note that the personal grimoire is empty and
+If `~/.grimoire/sigils/` is empty, note that the personal grimoire has no sigils yet and
 explain that it is populated through end-of-audit merges (`/scribe-distill` → end-of-audit
 merge via scribe Mode 2a).
 
