@@ -92,6 +92,30 @@ Use these sources in order of preference. Prefer primary sources over secondary 
 ### Local Knowledge Bases
 
 Researchers can maintain curated knowledge base repositories at `~/.grimoire/librarian/library/`.
+These libraries are also indexed into a local Qdrant vector database for semantic search.
+
+#### Semantic Search (preferred)
+
+Before grep-searching local libraries, use the `librarian-library-search` skill. It performs
+vector similarity search across all indexed library content and returns relevant chunks
+regardless of exact wording. The skill's own documentation describes the script invocation,
+flags, and output format — follow it.
+
+Use `metadata.file` and `metadata.source_url` from results to construct navigable GitHub URLs
+for citations (see Citation URL rules below).
+
+**When semantic search is enough:** If the top results are clearly relevant and complete, cite
+them and continue without grep. Limit to 1–2 calls per research question.
+
+**When to fall back to grep:** If the search returns no results, returns low-relevance chunks,
+or errors with "collection not found" (the index hasn't been built), fall through to direct
+grep of the library files.
+
+**Index not built?** Note this to the user and suggest running `librarian-index` to enable
+semantic search. Proceed with grep in the meantime.
+
+#### Direct File Search (fallback)
+
 Check for a `libraries.yaml` index at `~/.grimoire/librarian/library/libraries.yaml`. If it
 exists, read it to discover which repositories are available:
 

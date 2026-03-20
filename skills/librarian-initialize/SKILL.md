@@ -17,10 +17,11 @@ Set up or upgrade the librarian's directory structure at `~/.grimoire/librarian/
 
 ## Philosophy
 
-The librarian depends on two directories under `~/.grimoire/librarian/`:
+The librarian depends on three directories under `~/.grimoire/librarian/`:
 
 - **`library/`** — the researcher's curated knowledge bases, indexed by `libraries.yaml`
 - **`cache/`** — transient clones of external repositories fetched on demand
+- **`qdrant/`** — local Qdrant vector database used by the `librarian-index` skill for semantic search
 
 This skill creates that structure on a fresh machine and upgrades it when the layout
 has changed. It is safe to run at any time: it never overwrites an existing
@@ -49,25 +50,27 @@ task in_progress before starting it and completed when done.
 Check which parts of the expected layout already exist:
 
 ```bash
-[ -d ~/.grimoire/librarian ]          && echo "root: present"   || echo "root: absent"
-[ -d ~/.grimoire/librarian/library ]  && echo "library/: present" || echo "library/: absent"
-[ -d ~/.grimoire/librarian/cache ]    && echo "cache/: present"  || echo "cache/: absent"
+[ -d ~/.grimoire/librarian ]          && echo "root: present"    || echo "root: absent"
+[ -d ~/.grimoire/librarian/library ]  && echo "library/: present"  || echo "library/: absent"
+[ -d ~/.grimoire/librarian/cache ]    && echo "cache/: present"   || echo "cache/: absent"
+[ -d ~/.grimoire/librarian/qdrant ]   && echo "qdrant/: present"  || echo "qdrant/: absent"
 [ -f ~/.grimoire/librarian/library/libraries.yaml ] \
   && echo "libraries.yaml: present" || echo "libraries.yaml: absent"
 ```
 
-Record which of these four items are present and which are absent. This determines
+Record which of these five items are present and which are absent. This determines
 whether this is a fresh install or an upgrade, and exactly what needs to be created.
 
 ### 2. Plan the changes
 
 Based on the detection results, determine the set of actions:
 
-- If **all four** are present → nothing to do (already up to date)
+- If **all five** are present → nothing to do (already up to date)
 - Otherwise → for each absent item, plan to create it:
   - `~/.grimoire/librarian/` — root directory
   - `~/.grimoire/librarian/library/` — knowledge base directory
   - `~/.grimoire/librarian/cache/` — transient cache directory
+  - `~/.grimoire/librarian/qdrant/` — local vector database directory
   - `~/.grimoire/librarian/library/libraries.yaml` — empty library index
 
 Note whether this is a **fresh install** (root was absent) or an **upgrade** (root was
@@ -95,6 +98,11 @@ mkdir -p ~/.grimoire/librarian/library
 mkdir -p ~/.grimoire/librarian/cache
 ```
 
+**Create qdrant/ directory (if absent):**
+```bash
+mkdir -p ~/.grimoire/librarian/qdrant
+```
+
 **Create empty libraries.yaml (if absent):**
 ```bash
 cat > ~/.grimoire/librarian/library/libraries.yaml << 'EOF'
@@ -119,7 +127,7 @@ Summarize the outcome clearly:
   made.
 
 In all cases, remind the user of the next steps: add libraries with `modify-library`,
-or start using the librarian directly.
+index them with `librarian-index`, then use the librarian directly.
 
 Example fresh-install report:
 
@@ -127,9 +135,10 @@ Example fresh-install report:
 >
 > - Created `library/`
 > - Created `cache/`
+> - Created `qdrant/`
 > - Created `library/libraries.yaml` (empty)
 >
-> Add knowledge bases with the `modify-library` skill, or use the librarian directly.
+> Add knowledge bases with the `modify-library` skill, then index them with `librarian-index`.
 
 ## Guidelines
 
