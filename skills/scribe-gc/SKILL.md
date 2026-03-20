@@ -42,7 +42,7 @@ Ask the user which scope to review:
 - **Project-local** (`grimoire/spells/checks/`) — useful mid-engagement
 - **Both** — default when invoked from summon at start-of-audit
 
-If `~/.grimoire/sigils/` does not exist, note that the personal grimoire is empty (populated
+If `~/.grimoire/sigils/` is empty, note that the personal grimoire has no sigils yet (populated
 through end-of-audit merges) and limit scope to project-local.
 
 ### 2. Inventory Sigils

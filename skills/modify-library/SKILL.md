@@ -84,8 +84,8 @@ Run all checks that apply to the operation before touching any file.
   || echo "libraries.yaml: absent"
 ```
 
-If `libraries.yaml` is absent, stop and tell the user to run `librarian-initialize`
-first, then retry.
+If `libraries.yaml` is absent, something is wrong — it is created automatically on session
+start by the grimoire init hook. Report the error and stop.
 
 **Check that libraries.yaml is valid YAML:**
 
