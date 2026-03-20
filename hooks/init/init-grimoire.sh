@@ -9,6 +9,7 @@ GRIMOIRE="${GRIMOIRE_HOME:-$HOME/.grimoire}"
 
 dirs=(
   "$GRIMOIRE/librarian/library"
+  "$GRIMOIRE/librarian/qdrant"
   "$GRIMOIRE/librarian/cache"
   "$GRIMOIRE/sigils/archived"
   "$GRIMOIRE/knowledge"
