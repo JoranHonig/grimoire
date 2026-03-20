@@ -54,6 +54,35 @@ for flash loan protection", "What are known issues with rebasing tokens?"
 
 ## Research Strategy
 
+### Source Scoping
+
+Before choosing sources, check whether the caller's request **restricts the source set**.
+
+The caller may name a specific source ("search solodit for …", "check the ERC-4626 spec"),
+a source category ("search just the libraries", "only look at audit reports"), or a
+combination ("search the libraries and solodit for …"). When a constraint is present:
+
+1. **Use only the named source(s).** Do not fall through to other sources in the priority
+   list below.
+2. **Apply the same quality standards.** Every claim still needs a citation; if the
+   constrained source yields nothing, say so explicitly rather than silently widening the
+   search.
+3. **Offer to widen if results are poor.** If the constrained search produces no relevant
+   results, tell the caller what you found (or didn't) and suggest which additional sources
+   might help — but do not query them without the caller's approval.
+
+| Caller phrase (examples) | Resolved source(s) |
+|--------------------------|-------------------|
+| "search the libraries", "check my knowledge bases" | Local knowledge bases only (semantic search, then grep fallback) |
+| "search solodit", "find prior audit findings" | Claudit MCP tools (Solodit) only |
+| "check the spec", "what does the EIP say" | Official specifications and documentation only |
+| "look at the repo", "check the source code" | Canonical repositories only |
+| "search the web", "google for …" | Web sources only (WebSearch / WebFetch) |
+| "check context7 docs for …" | Context7 MCP tools only |
+| "search the local grimoire" | Local grimoire (`GRIMOIRE.md`, `tomes/`, `findings/`) only |
+
+When no constraint is present, fall through to the full priority list below.
+
 ### Source Priority
 
 Use these sources in order of preference. Prefer primary sources over secondary ones.
