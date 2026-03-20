@@ -21,6 +21,8 @@ confidence: medium
 tools: [Grep, Read]
 tags: [assertions, invariants]
 related-checks: [unchecked-panic-paths]
+attribution-name: Rust Security Advisory
+attribution-url: https://example.com/advisory/123
 ---
 ```
 
@@ -34,6 +36,8 @@ related-checks: [unchecked-panic-paths]
 | `tools`           | yes      | YAML list of tools the check needs (e.g., `Grep`, `Read`, `Bash`).|
 | `tags`            | no       | Freeform categorization tags for filtering.                        |
 | `related-checks`  | no       | List of related check slugs (without `.md`).                       |
+| `attribution-name`| no       | Name of the person, org, or resource that inspired the check.      |
+| `attribution-url` | no       | URL to the source material (must start with `http://` or `https://`).|
 
 **Constraint:** `name` and `description` must each be a single line. The indexing script relies
 on this for parsing.

@@ -21,6 +21,8 @@ languages=""
 severity=""
 confidence=""
 tools=""
+attribution_name=""
+attribution_url=""
 in_frontmatter=0
 frontmatter_closed=0
 body_lines=0
@@ -44,6 +46,8 @@ while IFS= read -r line; do
       severity-default:*) severity="${line#severity-default:}" ;;
       confidence:*) confidence="${line#confidence:}" ;;
       tools:*) tools="${line#tools:}" ;;
+      attribution-name:*) attribution_name="${line#attribution-name:}" ;;
+      attribution-url:*) attribution_url="${line#attribution-url:}" ;;
     esac
   fi
 
@@ -93,6 +97,19 @@ fi
 if [ "$body_lines" -gt 30 ]; then
   echo "WARNING: Body has $body_lines non-empty lines (recommended max: 30). Consider splitting." >&2
   warnings=$((warnings + 1))
+fi
+
+# Warn on malformed attribution URL
+attribution_url="${attribution_url# }"
+if [ -n "$attribution_url" ]; then
+  case "$attribution_url" in
+    http://*|https://*)
+      ;;
+    *)
+      echo "WARNING: attribution-url does not start with http:// or https://: $attribution_url" >&2
+      warnings=$((warnings + 1))
+      ;;
+  esac
 fi
 
 # Summary

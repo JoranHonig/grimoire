@@ -122,6 +122,9 @@ future improvement but create a check as a fallback.
 
 Follow the check format from `skills/checks/references/check-format.md`:
 - YAML frontmatter: name, description, languages, severity-default, confidence, tools, tags
+- If the finding or pattern originated from external research (librarian results, audit
+  reports, known registries like SWC), add `attribution-name` and `attribution-url` to
+  credit the source
 - Body: Patterns section (grep-able search patterns), Assessment section (how to evaluate
   matches, severity adjustment, benign cases)
 

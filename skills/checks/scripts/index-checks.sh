@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # index-checks.sh — Index check files by reading YAML frontmatter.
-# Outputs tab-separated: name\tdescription\tlanguages\tseverity\tconfidence\tfilepath
+# Outputs tab-separated: name\tdescription\tlanguages\tseverity\tconfidence\tattribution-name\tattribution-url\tfilepath
 # Usage: index-checks.sh [directory]
 # Default directory: grimoire/spells/checks/
 
@@ -28,6 +28,8 @@ for file in "$dir"/*.md; do
   languages=""
   severity=""
   confidence=""
+  attribution_name=""
+  attribution_url=""
   in_frontmatter=0
 
   while IFS= read -r line; do
@@ -76,12 +78,28 @@ for file in "$dir"/*.md; do
           confidence="${line#confidence:}"
           confidence="${confidence# }"
           ;;
+        attribution-name:*)
+          attribution_name="${line#attribution-name:}"
+          attribution_name="${attribution_name# }"
+          attribution_name="${attribution_name#\"}"
+          attribution_name="${attribution_name%\"}"
+          attribution_name="${attribution_name#\'}"
+          attribution_name="${attribution_name%\'}"
+          ;;
+        attribution-url:*)
+          attribution_url="${line#attribution-url:}"
+          attribution_url="${attribution_url# }"
+          attribution_url="${attribution_url#\"}"
+          attribution_url="${attribution_url%\"}"
+          attribution_url="${attribution_url#\'}"
+          attribution_url="${attribution_url%\'}"
+          ;;
       esac
     fi
   done < "$file"
 
   # Only output if we found both required display fields
   if [ -n "$name" ] && [ -n "$description" ]; then
-    printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$name" "$description" "$languages" "$severity" "$confidence" "$file"
+    printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$name" "$description" "$languages" "$severity" "$confidence" "$attribution_name" "$attribution_url" "$file"
   fi
 done

@@ -15,6 +15,8 @@ severity-default: medium
 confidence: medium
 tools: [Grep, Read]
 tags: [erc4626, vault, defi, standard]
+attribution-name: EIP-4626 Tokenized Vault Standard
+attribution-url: https://eips.ethereum.org/EIPS/eip-4626
 ---
 
 Identify contracts implementing ERC-4626 (look for `deposit`, `mint`, `withdraw`, `redeem`,
