@@ -86,7 +86,9 @@ version of the check name.
 Follow the format in `references/check-format.md`. The file has:
 
 1. **Frontmatter** — `name`, `description`, `languages`, `severity-default`, `confidence`,
-   `tools`. Optionally `tags` and `related-checks`.
+   `tools`. Optionally `tags`, `related-checks`, `attribution-name`, and `attribution-url`.
+   Add `attribution-name` and `attribution-url` when the check is inspired by external
+   research, a known registry (e.g., SWC), an audit report, or another person's work.
 2. **Pattern section** — what to search for. Keep patterns grep-able where possible.
 3. **Assessment section** — how to evaluate matches. Categories, severity adjustments, benign
    cases to dismiss.
