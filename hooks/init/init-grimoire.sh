@@ -20,6 +20,10 @@ for dir in "${dirs[@]}"; do
   fi
 done
 
+# Initialize git repository — idempotent (no-op if already a repo)
+git init -q "$GRIMOIRE" 2>/dev/null \
+  || { echo "grimoire-init: failed to git init $GRIMOIRE" >&2; exit 2; }
+
 # Create libraries.yaml only if absent — never overwrite
 LIBRARIES_YAML="$GRIMOIRE/librarian/library/libraries.yaml"
 if [ ! -f "$LIBRARIES_YAML" ]; then

@@ -35,7 +35,7 @@ test_fresh_install() {
     -v "$INIT_SCRIPT:/test/init-grimoire.sh:ro" \
     -e GRIMOIRE_HOME=/tmp/test-grimoire \
     docker.io/alpine:latest sh -c '
-      apk add --quiet --no-progress bash >/dev/null 2>&1
+      apk add --quiet --no-progress bash git >/dev/null 2>&1
       bash /test/init-grimoire.sh
 
       # Assert directories exist
@@ -46,6 +46,9 @@ test_fresh_install() {
         /tmp/test-grimoire/knowledge; do
         [ -d "$d" ] || { echo "missing dir: $d" >&2; exit 1; }
       done
+
+      # Assert git repository initialized
+      [ -d /tmp/test-grimoire/.git ] || { echo "missing .git directory" >&2; exit 1; }
 
       # Assert libraries.yaml exists with correct content
       [ -f /tmp/test-grimoire/librarian/library/libraries.yaml ] || { echo "missing libraries.yaml" >&2; exit 1; }
@@ -62,7 +65,7 @@ test_idempotency() {
     -v "$INIT_SCRIPT:/test/init-grimoire.sh:ro" \
     -e GRIMOIRE_HOME=/tmp/test-grimoire \
     docker.io/alpine:latest sh -c '
-      apk add --quiet --no-progress bash >/dev/null 2>&1
+      apk add --quiet --no-progress bash git >/dev/null 2>&1
 
       bash /test/init-grimoire.sh
       find /tmp/test-grimoire -type f -o -type d | sort > /tmp/state1
@@ -84,7 +87,7 @@ test_yaml_preservation() {
     -v "$INIT_SCRIPT:/test/init-grimoire.sh:ro" \
     -e GRIMOIRE_HOME=/tmp/test-grimoire \
     docker.io/alpine:latest sh -c '
-      apk add --quiet --no-progress bash >/dev/null 2>&1
+      apk add --quiet --no-progress bash git >/dev/null 2>&1
 
       mkdir -p /tmp/test-grimoire/librarian/library
       cat > /tmp/test-grimoire/librarian/library/libraries.yaml << "YAML"
@@ -109,7 +112,7 @@ test_failure_handling() {
     -v "$INIT_SCRIPT:/test/init-grimoire.sh:ro" \
     -e GRIMOIRE_HOME=/tmp/readonly/grimoire \
     docker.io/alpine:latest sh -c '
-      apk add --quiet --no-progress bash >/dev/null 2>&1
+      apk add --quiet --no-progress bash git >/dev/null 2>&1
       adduser -D testuser
 
       mkdir -p /tmp/readonly
