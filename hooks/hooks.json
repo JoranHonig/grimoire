@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "hooks/init/init-grimoire.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/init/init-grimoire.sh"
           }
         ]
       }
