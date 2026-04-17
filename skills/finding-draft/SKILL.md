@@ -49,11 +49,19 @@ Verify the workspace:
 - Check whether `grimoire/findings/` exists. Create it if not.
 
 Gather vulnerability context:
-- If triage context exists from the familiar agent, use it. Invoke the familiar agent
-  in finding triage mode (Mode 1) on the vulnerability context to get a triage assessment
-  — this helps calibrate severity and confirms the finding is worth drafting.
-- Otherwise, ask the user to describe: **what component** is affected, **what goes wrong**,
-  and **what the impact is**.
+- If triage context exists from the familiar agent, use it. Otherwise invoke the familiar
+  in finding triage mode (Mode 1) on the vulnerability context. The familiar produces:
+  - an **Impact** statement (use it to calibrate severity — step 3),
+  - a **Feasibility** analysis with an attacker class and prerequisite predicate (use it
+    to populate the finding's preconditions — step 4),
+  - a **Design Intent** verdict (if `Possibly By Design`, surface the familiar's
+    yes/no question to the user before drafting — the answer may change whether there
+    is a finding to draft at all),
+  - a **Scope Cross-Reference** (if a capability clause forecloses the attack path,
+    reconsider whether to proceed; if it downgrades severity, carry that through).
+- Ask the user to describe: **what component** is affected, **what goes wrong**, and
+  **what the impact is** — even with familiar context, the user's framing is the source
+  of truth for the finding's voice.
 - Search for existing PoC artifacts that relate to this vulnerability. If found, note the
   path for later `@reference`.
 
@@ -68,7 +76,9 @@ Present the candidate title to the user for confirmation.
 ### 3. Estimate Severity and Classify Type
 
 **Severity** — propose one of: Critical, High, Medium, Low, Informational. Provide a
-one-sentence justification. Use the severity scale from the finding skill.
+one-sentence justification. Use the severity scale from the finding skill. If the
+familiar produced an Adjusted Severity, use that as your starting point and only deviate
+with explicit justification.
 
 **Type** — classify the flaw. Consult `skills/finding/references/finding-format.md` for the
 recommended type taxonomy.
@@ -84,7 +94,10 @@ Write each section following the format from the finding skill and the detailed 
 in `skills/finding/references/finding-best-practices.md`:
 
 **## Description** (mandatory) — 2-4 self-contained paragraphs covering component, flaw,
-preconditions, and impact.
+preconditions, and impact. If the familiar produced a feasibility predicate or
+prerequisite table, the finding's preconditions should match it (or explicitly differ,
+with reasoning). The minimum attacker class from the familiar's Feasibility section
+should be stated here verbatim.
 
 **## Details** (optional) — only when the mechanism is non-obvious or multi-step.
 
