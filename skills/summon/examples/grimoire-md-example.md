@@ -1,7 +1,6 @@
 # GRIMOIRE — VaultBridge
 
 > Summoned: 2026-02-15
-> Scope: vaultbridge-core repository (v2.3.x branch)
 
 ## Target
 
@@ -17,6 +16,29 @@ secrets (API keys, database credentials, certificates). It uses envelope encrypt
 encrypted client-side with a data encryption key (DEK), and the DEK is wrapped with a key
 encryption key (KEK) managed by AWS KMS. Access is controlled through a role-based permission
 model with organization, team, and vault-level granularity.
+
+## Scope
+
+- **In-scope:** `vaultbridge-core` repository, `v2.3.x` branch. Covers `core/` (Rust service),
+  `gateway/` (TypeScript API), and `spa/` (React client).
+- **Out-of-scope:** Third-party KMS (AWS KMS) behavior; Stripe API integration; the
+  `legacy-cli/` directory (slated for removal in v2.4). Source: client engagement letter §3.
+
+### Capability assumptions (foreclose within granted capability)
+- `org_admin` role: can invite users, assign roles, rotate keys — but cannot directly read
+  secret payloads. Source: scope §4.1.
+- `kms_client` IAM role: can only `kms:Encrypt`/`kms:Decrypt` on the project's KEK ARN.
+  Source: `scope/iam-policy.json`.
+
+### Trust assumptions (context only; do not foreclose findings)
+- AWS KMS itself is assumed trusted — KMS service compromise is out of threat model.
+  Source: scope §3.2.
+- The SPA client environment is assumed not malicious at runtime (i.e., no attacker running
+  code in the user's browser beyond XSS the application introduces). Source: scope §3.3.
+
+### Protocol invariants (claimed to hold)
+- A wrapped DEK is never persisted outside PostgreSQL. Source: design doc §2.
+- Audit log entries are append-only once written. Source: scope §5.
 
 ## Architecture
 

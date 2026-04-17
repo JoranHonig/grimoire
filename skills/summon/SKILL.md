@@ -35,6 +35,7 @@ in_progress before starting it and completed when done.
 - [ ] 3. Build initial context — language, tooling, frameworks, integrations, problem & approach
 - [ ] 4. Map architecture and flows — identify structure, primary flows, key components
 - [ ] 5. Identify crown jewels — determine high-impact targets and threat model
+- [ ] 5b. Capture scope constraints — capability vs trust assumptions, out-of-scope, invariants
 - [ ] 6. Write GRIMOIRE.md — assemble the contextual map
 - [ ] 7. Review GRIMOIRE.md — kick off subagent to verify accuracy and trim bloat
 - [ ] 8. Surface automation opportunities — check for spellbook modules to run
@@ -165,6 +166,32 @@ vectors, and exploitation patterns by domain.
 This is an initial assessment. The user will refine crown jewels as the engagement progresses.
 GRIMOIRE.md is living memory.
 
+### 5b. Capture Scope Constraints
+
+Scope constraints are what the familiar agent uses to decide whether a finding is in or out
+of bounds. Capture them structurally, not as prose. Read any materials the user pointed you
+at (`scope/`, `meeting_notes/`, or client-provided docs) and extract:
+
+- **Capability assumptions** — statements that bound what a privileged actor *can do*.
+  These foreclose findings whose attack path falls strictly within the granted capability.
+  Example: *"the pauser role can only pause and unpause"*, *"the oracle only updates
+  prices, never arbitrary storage slots"*.
+- **Trust assumptions** — statements that an actor will behave *honestly*. These do NOT
+  foreclose findings; they only describe expected behavior. Example: *"admin is assumed
+  to be honest"*, *"the sequencer will not censor transactions"*.
+- **Out-of-scope components** — files, contracts, or flows the engagement explicitly
+  excludes. Cite the source of the exclusion.
+- **Protocol invariants** — properties the scope claims are maintained. These are useful
+  targets: an exploit that breaks an invariant is a valid finding even when the attacker
+  is nominally in scope.
+
+When a clause is ambiguous, classify it as **trust** (the weaker claim). This errs toward
+surfacing findings rather than silently dismissing them.
+
+If no scope materials exist, say so explicitly in the Scope section rather than leaving
+it empty — downstream triage needs to know the constraints are unknown, not assume none
+exist.
+
 ### 6. Write GRIMOIRE.md
 
 Assemble findings from steps 3-5 into `GRIMOIRE.md` at the project root. This file serves as:
@@ -178,7 +205,6 @@ Assemble findings from steps 3-5 into `GRIMOIRE.md` at the project root. This fi
 # GRIMOIRE — [Project Name]
 
 > Summoned: [date]
-> Scope: [brief scope description]
 
 ## Target
 
@@ -190,6 +216,23 @@ Assemble findings from steps 3-5 into `GRIMOIRE.md` at the project root. This fi
 ## Problem & Approach
 
 [2-3 sentences: what the project does and how]
+
+## Scope
+
+- **In-scope:** [paths / contracts / components covered by this engagement]
+- **Out-of-scope:** [explicit exclusions, with source]
+
+### Capability assumptions (foreclose within granted capability)
+- [role or actor]: can only [narrower capability]. Source: [scope doc / clause]
+
+### Trust assumptions (context only; do not foreclose findings)
+- [actor]: assumed to [act honestly / not behave adversarially]. Source: [scope doc / clause]
+
+### Protocol invariants (claimed to hold)
+- [invariant statement]. Source: [scope doc / clause]
+
+[If no scope materials were provided: state "No scope materials available — constraints
+unknown" so downstream triage is not silently uncalibrated.]
 
 ## Architecture
 
