@@ -31,16 +31,16 @@ searches, batched file reads, and concise notes.
 
 ## Helper Passes
 
-When delegation is explicitly authorized, helper passes need the following capabilities:
-- **Step 1a helper passes** (spec study): `Read`, `Glob`
-- **Step 1b helper passes** (pattern learning): `Read`, `Glob`
-- **Step 1c helper passes** (confirm non-existence): `Read`, `Glob`, `Grep`
-- **Step 2 helper pass** (plan design, high-reasoning): `Read`, `Glob`, `Grep`
-- **Step 3** (implement): uses `Write`, `Edit`, `Read`, `Glob`, `Grep` directly (not a helper pass)
-- **Step 4a** (skill review): uses `skill-reviewer` helper pass type
-- **Step 4b helper pass** (spec compliance, high-reasoning): `Read`, `Glob`, `Grep`
-- **Step 5** (update plan): uses `Read`, `Edit` or `Write` directly (not a helper pass)
-- **Step 6** (commit): uses `Bash` directly (not a helper pass)
+When delegation is explicitly authorized, helper passes need the following Codex-native scopes:
+- **Step 1a helper passes** (spec study): read assigned spec files and list nearby files.
+- **Step 1b helper passes** (pattern learning): read mature skill directories and summarize structure.
+- **Step 1c helper passes** (confirm non-existence): search with `rg` and inspect matching files.
+- **Step 2 helper pass** (plan design, high-reasoning): read the gathered summaries, searches, and relevant files.
+- **Step 3** (implement): edit the scoped implementation files directly, reading and searching as needed.
+- **Step 4a** (skill review): run a focused skill-quality review pass.
+- **Step 4b helper pass** (spec compliance, high-reasoning): compare the implementation against the spec files.
+- **Step 5** (update plan): update `IMPLEMENTATION_PLAN.md`.
+- **Step 6** (commit): run the necessary git/status/validation commands.
 
 When working locally, treat this list as the file-read/search scope for each pass.
 
@@ -122,7 +122,7 @@ scratch. Update IMPLEMENTATION_PLAN.md accordingly.
 
 ### 2. Plan the Implementation
 
-Using the spec summary, pattern profile, and search results, use an **high-reasoning helper pass** to
+Using the spec summary, pattern profile, and search results, use a **high-reasoning helper pass** to
 design the implementation. The helper pass should produce:
 
 - **File list** — every file that needs to be created or modified, with purpose
@@ -157,7 +157,7 @@ After implementation is complete, run two validation passes:
 
 #### 4a. Skill Review
 
-Invoke the **skill-reviewer** helper pass against the newly built component. This reviews
+Run a focused skill-quality review pass against the newly built component. This reviews
 quality, triggering effectiveness, and best practices compliance.
 
 #### 4b. Spec Compliance Check
@@ -172,9 +172,9 @@ The helper pass should:
 
 #### 4c. Evaluate and Apply
 
-Review the skill-reviewer recommendations and the spec compliance results together.
+Review the skill-quality recommendations and the spec compliance results together.
 
-For each skill-reviewer recommendation:
+For each skill-quality recommendation:
 - If it aligns with the specification and improves the implementation: **apply it**
 - If it contradicts the specification: **reject it** (spec is source of truth)
 - If it's about something the spec doesn't address: **apply it** only if it follows

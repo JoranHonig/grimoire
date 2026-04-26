@@ -26,11 +26,11 @@ item-by-item notes.
 
 ## Helper Passes
 
-When delegation is explicitly authorized, helper passes need the following capabilities:
-- **Step 0.5 helper passes** (pattern learning): `Read`, `Glob`
-- **Step 1 helper passes** (catalog): `Read`, `Glob`, `Grep`
-- **Step 2 helper passes** (analysis): `Read`, `Glob`, `Grep`
-- **Step 6** (update plan): uses `Write` directly (not a helper pass)
+When delegation is explicitly authorized, helper passes need the following Codex-native scopes:
+- **Step 0.5 helper passes** (pattern learning): read mature skill directories and summarize structure.
+- **Step 1 helper passes** (catalog): read assigned spec files and search related references.
+- **Step 2 helper passes** (analysis): search with `rg` and inspect implementation files for each item.
+- **Step 6** (update plan): update `IMPLEMENTATION_PLAN.md`.
 
 When working locally, treat this list as the file-read/search scope for each pass.
 

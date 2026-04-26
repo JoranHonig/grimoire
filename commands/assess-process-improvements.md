@@ -28,9 +28,9 @@ Otherwise, perform the extraction, classification, and proposal steps locally.
 
 ## Helper Passes
 
-- **Step 1 helper pass** (extract feedback): none needed (works from conversation context)
-- **Step 2 helper pass** (classify, high-reasoning): `Read`, `Glob`
-- **Step 3 helper pass** (propose fixes, high-reasoning): `Read`, `Glob`, `Grep`
+- **Step 1 helper pass** (extract feedback): use conversation context only.
+- **Step 2 helper pass** (classify, high-reasoning): read the relevant command or guidance files.
+- **Step 3 helper pass** (propose fixes, high-reasoning): search with `rg` and inspect target files.
 
 ## Workflow
 
@@ -61,7 +61,7 @@ aren't worth addressing.
 
 ### 2. Classify Root Causes
 
-For each confirmed feedback event, use an **high-reasoning helper pass** to determine the
+For each confirmed feedback event, use a **high-reasoning helper pass** to determine the
 root cause. The helper pass should read the relevant command file(s) and classify
 each event into one or more categories:
 
@@ -86,7 +86,7 @@ Present the classification to the user for confirmation.
 
 ### 3. Propose Process Changes
 
-For each classified root cause, use an **high-reasoning helper pass** to draft a specific,
+For each classified root cause, use a **high-reasoning helper pass** to draft a specific,
 minimal change to the appropriate file. The helper pass reads the target file and
 proposes:
 
@@ -126,8 +126,8 @@ Sort proposals by impact (most feedback events prevented first).
 Wait for the user to approve, modify, or reject each proposal. Then apply
 all approved changes:
 
-- Use `Edit` for modifications to existing files
-- Use `Write` only for new files
+- Modify existing files with focused edits.
+- Create new files only when the approved proposal requires them.
 - After applying, re-read each modified file to verify the change fits
   naturally in context
 
