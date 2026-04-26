@@ -1,0 +1,6 @@
+interface:
+  display_name: "Grimoire"
+  short_description: "Security research workflows for Codex"
+  icon_small: "./grimoire_logo.png"
+  icon_large: "./grimoire_logo.png"
+  default_prompt: "Summon Grimoire on this codebase and build an audit-ready contextual map."

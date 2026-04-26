@@ -6,7 +6,6 @@ description: >-
   "report a vulnerability", "/finding-draft", or wants to construct a new structured
   security finding from a vulnerability observation. This skill is NOT for reviewing
   existing findings (use /finding-review) or deduplicating findings (use /finding-dedup).
-user_invocable: true
 ---
 
 # Finding Draft

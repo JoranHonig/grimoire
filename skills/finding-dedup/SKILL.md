@@ -7,7 +7,6 @@ description: >-
   findings in a project. Classifies finding pairs as duplicate (can delete one) or similar
   (different scope, may merge). This skill is NOT for drafting new findings (use
   /finding-draft) or reviewing individual findings (use /finding-review).
-user_invocable: true
 ---
 
 # Finding Dedup

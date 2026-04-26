@@ -8,7 +8,6 @@ description: >-
   via semantic/vector search. Reads all registered libraries from
   libraries.yaml, chunks their files, and stores them in the local Qdrant
   vector database so the librarian agent can do semantic search.
-user_invocable: true
 ---
 
 # Librarian Index

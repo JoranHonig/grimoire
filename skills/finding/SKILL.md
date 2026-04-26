@@ -6,7 +6,6 @@ description: >-
   finding", "/finding", or wants to understand how security findings are structured and
   written. Teaches the format, best practices, and conventions for security findings.
   For specific workflows use /finding-draft, /finding-review, or /finding-dedup.
-user_invocable: true
 ---
 
 # Finding

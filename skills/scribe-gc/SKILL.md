@@ -6,7 +6,6 @@ description: >-
   detectors", "review my spellbook", "prune sigils", or when duplicate detection
   modules need to be identified and resolved. Scans the personal grimoire or
   project spellbook for overlapping or duplicate sigils and proposes resolutions.
-user_invocable: true
 ---
 
 # Scribe GC
