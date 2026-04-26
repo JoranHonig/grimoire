@@ -39,3 +39,12 @@ There is no traditional build system, runtime, or compiled application.
   Otherwise, run the same workflow locally with focused file reads, `rg`, and concise checkpoints.
 - Preserve Grimoire's security boundaries: authorized contexts only, benign payloads, parameterized
   targets, and concrete reproducibility for every finding.
+
+## Recommended Workflow
+
+- Start with `summon` to build `GRIMOIRE.md` and get the first pass on the target.
+- Use `cartography` for code-path mapping and `librarian` for external sources or prior findings.
+- Capture results with `finding-draft`, then verify them with `finding-review` or `Familiar`.
+- Reproduce only when needed with `write-poc`.
+- Distill stable patterns with `scribe`.
+- Use `gap-analysis`, `execute-plan`, and `assess-process-improvements` when the plugin itself needs work.

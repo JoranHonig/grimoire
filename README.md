@@ -36,25 +36,20 @@ are designed to just *work* within whatever workflow you follow.
 
 Grimoire is built on a few hard convictions from real-world security research:
 
-- **Leverage over automation.** Grimoire provides skills that amplify operator skill, though some automation is present this is just to give you space for more research.
-- **Ergonomics** Agents are already quite useful, Grimoire provides skills (e.g. cartography) that fine tune agent behaviour to be more adjusted to auditing workflows.
-- **Not getting in your way** Grimoire takes the base agent experience and makes it more useful for auditing wihout getting in your way.
+- **Leverage over automation.** Grimoire provides skills that amplify operator skill, though some automation is present to give you more room for research.
+- **Ergonomics.** Agents are already quite useful, and Grimoire adds skills like cartography that fit security-review workflows better.
+- **Not getting in your way.** Grimoire takes the base agent experience and makes it more useful for auditing without getting in your way.
 
 ### Alpha
 
-Grimoire is still at a very early stage and under continuous development expect there to be major changes.
+Grimoire is still at a very early stage and under continuous development, so expect major changes.
 
 ## Getting Started
 
-Grimore is set up as a Codex plugin that's easy to set up.
-
-At first you should just use the summon command and get going, grimoire will automatically hop in once you ask
-Codex to write a finding, proof of concept, or a similar task.
-
-Once you're ready to dive deep we would suggest having a look at the scribe and cartography skills.
-
-* **scribe** - automatically analyzes your findings and build detection modules for them (which are automatically ran in your next audit)
-* **cartography** - super useful for large codebases. The cartography skill has Codex memorize where to find the context related to different flows/ features. That makes it super easy to load different contexts.
+Yes, you can use Grimoire as part of a normal Codex security workflow. The shortest loop is:
+`summon` for context, `cartography` for flow mapping, `librarian` for outside research,
+`finding-draft` and `finding-review` for capture, `write-poc` for reproduction, and `scribe`
+for reusable checks.
 
 ### Installation
 
@@ -115,24 +110,39 @@ Set these in your Codex environment or settings:
 }
 ```
 
-Both are optional — the librarian will fall back to web search if they are not set. You can also export them as regular shell environment variables (e.g. in `~/.zshrc`) instead of using `settings.json`.
+Both are optional - the librarian will fall back to web search if they are not set. You can also export them as regular shell environment variables (for example in `~/.zshrc`) instead of using `settings.json`.
 
-### Summon
+### Workflow
 
-Start any engagement with `summon`:
+Use Grimoire like this in practice:
 
-```
+1. Start with `summon`.
+2. Use `cartography` to map code paths and `librarian` to research outside sources.
+3. Turn confirmed issues into artifacts with `finding-draft` and `finding-review`.
+4. Reproduce with `write-poc`.
+5. Distill repeatable defenses with `scribe`.
+6. When improving Grimoire itself, use `gap-analysis`, `execute-plan`, and `assess-process-improvements`.
+
+Example session:
+
+```text
 You:      "Summon grimoire on this codebase"
 Grimoire: → Analyzes project structure, architecture, integrations
           → Identifies crown jewels and attack surface
           → Writes GRIMOIRE.md contextual map
-          → Spawns detection checks across the codebase
-          → Surfaces initial findings for triage
+          → Surfaces first targets for research
+
+You:      "Map the authentication flow"
+You:      "Look up prior audit findings for ERC-4626 inflation attacks"
+You:      "Document this as a finding"
+You:      "Review my findings before submission"
+You:      "Write a PoC for the reentrancy I found"
+You:      "Distill this finding into a check"
 ```
 
-Then work naturally — Grimoire's skills trigger from context:
+If you just want the quick routing map, these are the common phrases:
 
-```
+```text
 "Map the authentication flow"              → cartography
 "Write a PoC for the reentrancy I found"   → write-poc
 "Document this as a finding"               → finding-draft
