@@ -7,12 +7,16 @@ description: >-
   summary", "list audit findings", "what's annotated",
   or wants to discover, list, or filter @audit-* comment annotations
   scattered throughout a codebase. This skill is for annotation discovery only —
-  how annotations are used downstream (spawning subagents, cross-referencing
+  how annotations are used downstream (running helper passes, cross-referencing
   findings, etc.) is out of scope.
-user_invocable: true
 ---
 
 # Annotation
+
+## Codex Execution Note
+
+Only use Codex workers when the user explicitly asks for delegation or parallel agent work. Otherwise, run the same workflow locally with focused `rg` searches, batched file reads, and concise checkpoints.
+
 
 Find `@audit` annotations in a codebase and return them as structured JSON.
 

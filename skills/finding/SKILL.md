@@ -6,10 +6,14 @@ description: >-
   finding", "/finding", or wants to understand how security findings are structured and
   written. Teaches the format, best practices, and conventions for security findings.
   For specific workflows use /finding-draft, /finding-review, or /finding-dedup.
-user_invocable: true
 ---
 
 # Finding
+
+## Codex Execution Note
+
+Only use Codex workers when the user explicitly asks for delegation or parallel agent work. Otherwise, run the same workflow locally with focused `rg` searches, batched file reads, and concise checkpoints.
+
 
 Security findings are the core deliverable of security research — structured markdown files
 that prove a vulnerability exists and tell the recipient what to fix.

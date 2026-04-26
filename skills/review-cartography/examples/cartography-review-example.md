@@ -50,16 +50,16 @@ permission checks, KMS key unwrapping, and client-side decryption.
 
 ## Review Findings
 
-Each subagent reports independently:
+Each helper pass reports independently:
 
-- **Entry points subagent:** Found `cli/src/commands/get_secret.rs:run` — a CLI entry point
+- **Entry points helper pass:** Found `cli/src/commands/get_secret.rs:run` — a CLI entry point
   added after initial mapping. File exists, handler dispatches to the same core gRPC path.
-- **Key components subagent:** `core/src/crypto/envelope.rs` was renamed to
+- **Key components helper pass:** `core/src/crypto/envelope.rs` was renamed to
   `core/src/crypto/decrypt.rs` in a recent refactor. Current path is stale.
-- **Flow sequence subagent:** Sequence is missing a step — a request validation middleware
+- **Flow sequence helper pass:** Sequence is missing a step — a request validation middleware
   (`gateway/src/middleware/validate.ts:validateRequest`) was added between auth and core
   dispatch.
-- **Security notes subagent:** New audit logging was added at step 5, but it logs the secret
+- **Security notes helper pass:** New audit logging was added at step 5, but it logs the secret
   name in plaintext — potential information disclosure via log access.
 
 ## Corrected Flow File (After Review)
@@ -121,8 +121,8 @@ which stored credentials can be exfiltrated if any step is compromised.
 
 ## Why This Review Works
 
-- **Independent verification.** Each subagent checked actual code, not just path existence.
-  The renamed file (`envelope.rs` to `decrypt.rs`) was caught because the subagent read the
+- **Independent verification.** Each helper pass checked actual code, not just path existence.
+  The renamed file (`envelope.rs` to `decrypt.rs`) was caught because the helper pass read the
   directory listing, not just tested `[ -f path ]`.
 - **No bloat.** Four issues found, four things fixed. The file gained a few lines from the new
   entry point and sequence step but stayed well under 80 lines.

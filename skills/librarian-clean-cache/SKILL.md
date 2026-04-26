@@ -7,10 +7,14 @@ description: >-
   "how much space is librarian using", or wants to remove cached repositories
   that the librarian has cloned locally. Clears ~/.grimoire/librarian/cache/ to
   reclaim disk space without touching the curated library/ directory.
-user_invocable: true
 ---
 
 # Librarian Clean Cache
+
+## Codex Execution Note
+
+Only use Codex workers when the user explicitly asks for delegation or parallel agent work. Otherwise, run the same workflow locally with focused `rg` searches, batched file reads, and concise checkpoints.
+
 
 Clear the librarian's local repository cache at `~/.grimoire/librarian/cache/`.
 

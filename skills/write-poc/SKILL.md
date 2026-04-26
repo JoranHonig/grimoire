@@ -1,6 +1,5 @@
 ---
 name: write-poc
-user_invocable: true
 description: >-
   This skill should be used when the user asks to "write a proof of concept",
   "create a PoC", "demonstrate a vulnerability", "write an exploit PoC",
@@ -13,6 +12,11 @@ description: >-
 ---
 
 # Write Proof of Concept
+
+## Codex Execution Note
+
+Only use Codex workers when the user explicitly asks for delegation or parallel agent work. Otherwise, run the same workflow locally with focused `rg` searches, batched file reads, and concise checkpoints.
+
 
 ## Purpose
 
@@ -59,11 +63,11 @@ in_progress before starting it and completed when done. Use descriptions from th
 sections below.
 
 ```
-- [ ] 1. Gather vulnerability details — study the issue and impacted code, establish vuln class, root cause, attack surface, prerequisites, and impact. Consider dispatching a librarian for external references. Confirm with user.
+- [ ] 1. Gather vulnerability details — study the issue and impacted code, establish vuln class, root cause, attack surface, prerequisites, and impact. Use the librarian workflow for external references when needed. Confirm with user.
 - [ ] 2. Define exploit flow — formulate goal condition, determine mono/poly flow, sketch steps if multi-step. Confirm with user.
 - [ ] 3. Determine PoC approach — choose test case vs script, for smart contracts decide fork/unit test and whether to use forge-poc-templates. Confirm with user.
-- [ ] 4. Write the PoC — dispatch a gnome with the full briefing from phases 1-3 to implement the PoC. Review gnome output and confirm with user.
-- [ ] 5. Review before delivery — dispatch a familiar to independently verify the PoC against the review checklist. Present familiar's assessment to user for final approval.
+- [ ] 4. Write the PoC — implement from the full briefing in phases 1-3, optionally delegating to a Codex worker with the gnome prompt when explicitly authorized. Review the output and confirm with user.
+- [ ] 5. Review before delivery — independently verify the PoC against the familiar checklist, optionally delegating when explicitly authorized. Present the assessment to user for final approval.
 ```
 
 ---
@@ -87,8 +91,8 @@ If any detail is unclear, ask the user before proceeding. A PoC built on incorre
 
 Study both the impacted code and the issue description provided by the user, make sure to understand the exploit flow deeply.
 
-**Librarian.** If the vulnerability involves external protocols, specifications, or known
-vulnerability patterns, consider dispatching a librarian agent to retrieve relevant
+**Librarian workflow.** If the vulnerability involves external protocols, specifications, or known
+vulnerability patterns, use the librarian skill/agent prompt to retrieve relevant
 documentation, prior findings, or security advisories. This is especially useful for
 protocol-level bugs (e.g., ERC specs, DeFi invariants) where the codebase alone doesn't
 tell the full story.
@@ -178,12 +182,13 @@ Always confirm the PoC approach with the user.
 
 ### 4. Write the PoC
 
-**Delegate to a gnome agent.** By this point all decisions have been made — the vulnerability
-is understood, the exploit flow is designed, and the approach is confirmed. Dispatch a gnome
-(subagent) to implement the PoC in an isolated context. This keeps the orchestration context
-clean from implementation details and preserves context for the review phase.
+**Implementation role.** By this point all decisions have been made — the vulnerability is
+understood, the exploit flow is designed, and the approach is confirmed. Implement the PoC from
+the briefing below. If the user explicitly authorized delegation, assign this implementation to
+a Codex worker using the gnome prompt; otherwise do the implementation locally while keeping
+notes concise for the review phase.
 
-**Gnome briefing.** Provide the gnome with:
+**Implementation briefing.** Use or provide:
 - The vulnerability details from phase 1 (class, root cause, affected component, impact)
 - The exploit flow from phase 2 (goal condition, mono/poly, step sketch)
 - The chosen approach from phase 3 (test case vs script, fork vs unit, forge-poc-templates)
@@ -191,11 +196,11 @@ clean from implementation details and preserves context for the review phase.
 - The specific source files it needs to read
 - An example PoC from the `examples/` directory that best matches the chosen approach
 
-**Gnome instructions.** The gnome must follow all implementation guidelines below and report
-back with: the implemented PoC, a summary of decisions made during implementation, and any
-blockers or assumptions it had to make.
+**Implementation instructions.** Follow all implementation guidelines below and record: the
+implemented PoC, a summary of decisions made during implementation, and any blockers or
+assumptions.
 
-**Implementation guidelines (included in gnome briefing):**
+**Implementation guidelines:**
 
 Structure every PoC with these elements:
 
@@ -244,22 +249,23 @@ Important: Never run the PoC against a production environment without asking the
 
 **Confirm**
 
-Once the gnome returns, review its output for obvious issues and present the completed PoC
+After implementation, review the output for obvious issues and present the completed PoC
 to the user. Walk them through the implementation and confirm it matches the agreed approach,
 covers the full exploit flow, and produces clear output.
 
 ### 5. Review Before Delivery
 
-**Delegate to a familiar agent.** Dispatch a familiar (subagent using a high-reasoning model)
-to independently review the PoC produced in phase 4. The familiar acts as a skeptical
-reviewer — it verifies rather than assumes.
+**Independent review.** Review the PoC using the familiar checklist below. If the user
+explicitly authorized delegation, assign this review to a Codex worker using the familiar
+prompt; otherwise perform the review locally as a separate pass. The reviewer verifies rather
+than assumes.
 
-**Familiar briefing.** Provide the familiar with:
+**Review briefing.** Use or provide:
 - The vulnerability details from phase 1
 - The exploit flow from phase 2
 - The completed PoC code from phase 4
 
-**Familiar review checklist.** The familiar must verify each item and report its assessment:
+**Familiar review checklist.** Verify each item and report the assessment:
 
 - [ ] No destructive payloads or actions
 - [ ] PoC actually demonstrates the vulnerability (not just a theoretical description)

@@ -12,10 +12,14 @@ description: >-
   libraries the librarian has access to. Modifies
   ~/.grimoire/librarian/library/libraries.yaml to add, remove, or update
   library entries. Supports git repositories and local symlink directories.
-user_invocable: true
 ---
 
 # Modify Library
+
+## Codex Execution Note
+
+Only use Codex workers when the user explicitly asks for delegation or parallel agent work. Otherwise, run the same workflow locally with focused `rg` searches, batched file reads, and concise checkpoints.
+
 
 Add, remove, or change a library entry in `~/.grimoire/librarian/library/libraries.yaml`.
 

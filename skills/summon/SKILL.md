@@ -7,12 +7,16 @@ description: >-
   "map a codebase for security", "prepare for an audit", or wants to initialize
   Grimoire on a new codebase. This is the first skill run on a new engagement.
   It builds initial context, creates the audit workspace structure, and produces
-  GRIMOIRE.md — the living contextual map that primes all future agent
+  GRIMOIRE.md — the living contextual map that primes future Grimoire
   interactions for security research.
-user_invocable: true
 ---
 
 # Summon
+
+## Codex Execution Note
+
+Only use Codex workers when the user explicitly asks for delegation or parallel agent work. Otherwise, run the same workflow locally with focused `rg` searches, batched file reads, and concise checkpoints.
+
 
 Initialize Grimoire on a new codebase. Build context, create the audit workspace, and produce
 `GRIMOIRE.md` — the living contextual map for this security engagement.
@@ -20,8 +24,8 @@ Initialize Grimoire on a new codebase. Build context, create the audit workspace
 ## Philosophy
 
 **Build context first.** Top researchers always establish contextual understanding before hunting
-for bugs. Summon explores the target, builds a map, and gives you and future agents the context
-needed to do meaningful work. Keep GRIMOIRE.md concise — it is loaded into every agent context.
+for bugs. Summon explores the target, builds a map, and gives you future Grimoire context
+needed to do meaningful work. Keep GRIMOIRE.md concise — it is loaded into future sessions.
 Detailed notes belong in `grimoire/tomes/`.
 
 ## Workflow
@@ -37,9 +41,9 @@ in_progress before starting it and completed when done.
 - [ ] 5. Identify crown jewels — determine high-impact targets and threat model
 - [ ] 5b. Capture scope constraints — capability vs trust assumptions, out-of-scope, invariants
 - [ ] 6. Write GRIMOIRE.md — assemble the contextual map
-- [ ] 7. Review GRIMOIRE.md — kick off subagent to verify accuracy and trim bloat
+- [ ] 7. Review GRIMOIRE.md — run a helper pass to verify accuracy and trim bloat
 - [ ] 8. Surface automation opportunities — check for spellbook modules to run
-- [ ] 9. Spawn sigil swarm — run checks-based sigils against the codebase
+- [ ] 9. Run sigil swarm — run checks-based sigils against the codebase
 ```
 
 ---
@@ -81,7 +85,7 @@ project/
     in_scope_repo/              # already present
     grimoire/
         findings/               # findings during this audit
-        sigil-findings/         # findings sourced from sigil agents
+        sigil-findings/         # findings sourced from sigil passes
         spells/                 # scripts, PoCs, static analysis modules
         tomes/                  # documentation, detailed notes, learnings
         tmp/                    # temporary files and scripts
@@ -101,8 +105,8 @@ Do not overwrite existing directories or files.
 
 ### 3. Build Initial Context
 
-Explore the in-scope repository to answer these questions. Use subagents to parallelize exploration
-where possible.
+Explore the in-scope repository to answer these questions. Use helper passes to partition
+exploration; use Codex workers only when explicitly authorized.
 
 **Concrete details:**
 - What programming language(s) are used?
@@ -123,9 +127,8 @@ conveys reality. Cross-reference both.
 
 ### 4. Map Architecture and Flows
 
-Dive deeper into the codebase to understand structure and behavior. Use subagents to explore
-individual modules, components, or flows in parallel. Keep the main context focused on assembling
-the map.
+Dive deeper into the codebase to understand structure and behavior. Use helper passes to explore
+individual modules, components, or flows. Keep the main context focused on assembling the map.
 
 **Architecture (structure):**
 - How is the codebase organized? (modules, packages, layers)
@@ -168,7 +171,7 @@ GRIMOIRE.md is living memory.
 
 ### 5b. Capture Scope Constraints
 
-Scope constraints are what the familiar agent uses to decide whether a finding is in or out
+Scope constraints are what the familiar workflow uses to decide whether a finding is in or out
 of bounds. Capture them structurally, not as prose. Read any materials the user pointed you
 at (`scope/`, `meeting_notes/`, or client-provided docs) and extract:
 
@@ -196,7 +199,7 @@ exist.
 
 Assemble findings from steps 3-5 into `GRIMOIRE.md` at the project root. This file serves as:
 - Initial context for the researcher
-- Context primer for all future agent interactions
+- Context primer for future Grimoire interactions
 - A living document that evolves during the engagement
 
 **Template:**
@@ -258,7 +261,7 @@ deeper investigation. Keep this brief — it will grow during the engagement.]
 ```
 
 **Important constraints:**
-- Keep GRIMOIRE.md concise. It will be loaded into every agent context.
+- Keep GRIMOIRE.md concise. It will be loaded into future Grimoire context.
 - Use `[[document-name]]` cross-linking to reference detailed notes in `grimoire/tomes/`.
 - Do not include line-by-line code analysis. That belongs in tomes.
 - Consult `examples/grimoire-md-example.md` for a concrete reference of what a completed
@@ -266,14 +269,14 @@ deeper investigation. Keep this brief — it will grow during the engagement.]
 
 ### 7. Review GRIMOIRE.md
 
-After writing GRIMOIRE.md, kick off a subagent to review it. The subagent should read both
+After writing GRIMOIRE.md, run a helper pass to review it. The helper pass should read both
 GRIMOIRE.md and the in-scope codebase independently to verify accuracy and flag bloat. Do not
-skip this step — the main agent built context progressively and may have carried forward
+skip this step — the main workflow built context progressively and may have carried forward
 assumptions or included too much detail.
 
-**Subagent instructions:**
+**Helper pass instructions:**
 
-Give the subagent the following mandate. It should read GRIMOIRE.md and then independently spot-check
+Give the helper pass the following mandate. It should read GRIMOIRE.md and then independently spot-check
 claims against the actual codebase:
 
 1. **Accuracy check** — Verify factual claims against the codebase:
@@ -283,8 +286,8 @@ claims against the actual codebase:
    - Are crown jewel locations accurate?
    - Flag anything stated with confidence that the code contradicts.
 
-2. **Bloat check** — GRIMOIRE.md is loaded into every agent context. Every unnecessary line
-   degrades future agent performance. Flag:
+2. **Bloat check** — GRIMOIRE.md is loaded into future Grimoire context. Every unnecessary line
+   degrades future Grimoire performance. Flag:
    - Sections that repeat the same information in different words
    - Overly detailed flow descriptions that belong in `grimoire/tomes/`
    - Vague filler sentences that don't add navigational or security value
@@ -295,8 +298,8 @@ claims against the actual codebase:
    - Significant components missing from the architecture
    - Crown jewels that seem absent given the project domain
 
-The subagent should return a short list of specific corrections, cuts, and additions. Apply them
-to GRIMOIRE.md before presenting the final version to the user. Show the user what the subagent
+The helper pass should return a short list of specific corrections, cuts, and additions. Apply them
+to GRIMOIRE.md before presenting the final version to the user. Show the user what the helper pass
 found and what was changed.
 
 ### 8. Surface Automation Opportunities
@@ -323,15 +326,15 @@ suggest running the Scribe GC skill (`/scribe-gc` with scope "both") to check fo
 between personal and project-local sigils before applying them.
 
 Note in GRIMOIRE.md under Automation that new detection modules can be distilled from findings
-as the engagement progresses using the Scribe agent (`/scribe-distill`).
+as the engagement progresses using the Scribe workflow (`/scribe-distill`).
 
-### 9. Spawn Sigil Swarm
+### 9. Run Sigil Swarm
 
-After automation discovery, spawn sigil agents to hunt for known vulnerability patterns across
-the codebase. Each sigil is a single-context agent that hunts one bug pattern using a check
-from the spellbook.
+After automation discovery, run sigil workflows to hunt for known vulnerability patterns across
+the codebase. Each sigil is a focused pass that hunts one bug pattern using a check from the
+spellbook.
 
-Consult `references/sigil-spawning.md` for the subagent prompt template and detailed guidance.
+Consult `references/sigil-running.md` for the helper pass prompt template and detailed guidance.
 
 **Index available checks.**
 
@@ -355,22 +358,22 @@ The script outputs only the checks that apply.
 Present the user with:
 - How many applicable checks were found
 - A brief list of check names and what they detect
-- The estimated number of sigils to spawn
+- The estimated number of sigils to run
 
-Ask whether to: **spawn all**, **select a subset**, or **skip**. Sigil spawning is the most
+Ask whether to: **run all**, **select a subset**, or **skip**. Sigil running is the most
 expensive operation in the workflow — the user must explicitly approve it.
 
 If there are more than 20 applicable checks, warn about the time cost and suggest filtering
 by tag or selecting a subset.
 
-**Spawn sigils.**
+**Run sigils.**
 
-For each approved check, spawn a subagent sigil. Process in batches of 5 to manage context
-budget. For each check, give the subagent these instructions:
+For each approved check, run a helper pass sigil. Process in batches of 5 to manage context
+budget. For each check, give the helper pass these instructions:
 
 1. Read GRIMOIRE.md for engagement context
 2. Read the check file at `<filepath>` for the vulnerability pattern
-3. Hunt following the protocol in `references/sigil-spawning.md` — formulate a hypothesis from
+3. Hunt following the protocol in `references/sigil-running.md` — formulate a hypothesis from
    the check, search the codebase, evaluate evidence, produce a finding or dismiss
 4. Write any findings to `grimoire/sigil-findings/<check-slug>.md` where `<check-slug>` is the
    check's filename without extension. If a check produces multiple findings, append a numeric
@@ -378,7 +381,7 @@ budget. For each check, give the subagent these instructions:
 5. Return a hunt summary: check name, verdict (finding or dismissed), confidence, and file path
    if a finding was written
 
-Wait for each batch of 5 to complete before spawning the next batch.
+Wait for each batch of 5 to complete before running the next batch.
 
 **Collect and present results.**
 
@@ -395,11 +398,10 @@ Checks run: [N]  |  Findings: [N]  |  Dismissed: [N]
 
 Group findings by severity (Critical/High first).
 
-**Familiar Triage.** Invoke the familiar agent in batch triage mode (Mode 2) on
-`grimoire/sigil-findings/`. The familiar will independently verify each finding, dismiss
-false positives (moving them to `grimoire/sigil-findings/dismissed/`), and adjust severity
-where warranted. Present the familiar's triage summary to the user instead of raw sigil
-results.
+**Familiar Triage.** Run the familiar workflow in batch triage mode (Mode 2) on
+`grimoire/sigil-findings/`. Independently verify each finding, dismiss false positives
+(moving them to `grimoire/sigil-findings/dismissed/`), and adjust severity where warranted.
+Present the triage summary to the user instead of raw sigil results.
 
 **Update GRIMOIRE.md.**
 
@@ -412,7 +414,7 @@ Append to the Automation section:
 
 ## Guidelines
 
-- **Subagents for exploration.** Use subagents to parallelize codebase exploration. This keeps
+- **Helper passes for exploration.** Use helper passes to partition codebase exploration. This keeps
   the main context clean and speeds up the process.
 - **Cross-reference documentation and code.** Documentation describes intent; code describes
   reality. Discrepancies between the two are themselves interesting from a security perspective.

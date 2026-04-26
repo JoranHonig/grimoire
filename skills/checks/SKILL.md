@@ -4,14 +4,18 @@ description: >-
   This skill should be used when the user says "create a check", "write a check",
   "add a check", "apply checks", "run checks", "/checks", "vulnerability pattern",
   "detection check", "check for common bugs", "scan with checks", or wants to create,
-  apply, or manage simple vulnerability pattern files that agents use to find flaws.
-  Checks are the simplest unit of agentic vulnerability detection — markdown files
+  apply, or manage simple vulnerability pattern files that Codex uses to find flaws.
+  Checks are the simplest unit of focused vulnerability detection — markdown files
   describing what to look for and how to assess matches. This skill is NOT for
   general code review or ad-hoc vulnerability analysis.
-user_invocable: true
 ---
 
 # Checks
+
+## Codex Execution Note
+
+Only use Codex workers when the user explicitly asks for delegation or parallel agent work. Otherwise, run the same workflow locally with focused `rg` searches, batched file reads, and concise checkpoints.
+
 
 Create, apply, and manage vulnerability pattern checks — simple markdown files that describe
 what to look for in a codebase and how to assess matches.
@@ -57,14 +61,14 @@ If unclear, ask the user. Then skip to the relevant step.
 
 Three sources for new checks:
 
-**From a confirmed finding.** The user or an agent found a specific bug. Generalize the pattern:
+**From a confirmed finding.** The user or a Codex session found a specific bug. Generalize the pattern:
 what was the observable code pattern? What conditions made it exploitable? What would a grep
 for similar instances look like?
 
 **From domain knowledge.** The user knows a class of bugs to look for (e.g., "check for ERC-4626
 vault issues"). Extract the specific patterns and assessment criteria.
 
-**From external research.** Use the librarian agent to gather context on a
+**From external research.** Use the librarian workflow to gather context on a
 vulnerability class, then distill into grep-able patterns and assessment rules.
 
 For any source, extract:
@@ -119,7 +123,7 @@ This verifies:
 - Body length is within the recommended limit (warns if >30 lines)
 
 Review the check against the simplicity principle: is this one pattern? Is the assessment
-clear? Could an agent apply this in a single focused pass?
+clear? Could a Codex session apply this in a single focused pass?
 
 Check in with the user before continuing.
 
@@ -141,27 +145,27 @@ Filter by:
 
 ### 6. Run Checks Against the Codebase
 
-For each selected check, spawn a subagent with:
+For each selected check, run a helper pass with:
 
 1. The check file content as its instructions
 2. The target codebase path
 3. Only the tools listed in the check's `tools` field
 
-Each subagent operates independently with minimal context — just the check and the code. This
-isolation is critical for attention management. Do not bundle multiple checks into one agent.
+Each helper pass operates independently with minimal context — just the check and the code. This
+isolation is critical for attention management. Do not bundle multiple checks into one pass.
 
-Subagents report back for each match:
+Helper passes report back for each match:
 - File path and line number
 - Which pattern matched
 - Assessed severity (adjusted from default based on context)
 - Confidence assessment
 - Brief description of why this is or isn't a finding
 
-Run subagents in parallel where possible.
+Run helper passes in parallel where possible, using Codex workers only when explicitly authorized.
 
 ### 7. Collect and Present Results
 
-Aggregate results from all subagents. Present findings grouped by severity:
+Aggregate results from all helper passes. Present findings grouped by severity:
 
 1. **Critical / High** — show first, with full context
 2. **Medium** — show with summary
@@ -173,7 +177,7 @@ For each finding, include:
 - Assessed severity and confidence
 - Brief description
 
-After presenting findings, suggest invoking the familiar agent to triage them. The familiar
+After presenting findings, suggest invoking the familiar workflow to triage them. The familiar
 independently verifies each finding and filters false positives before the user acts on them.
 
 ### 8. Suggest Follow-ups
@@ -191,10 +195,10 @@ Based on results, suggest:
 ## Guidelines
 
 - **One pattern per check file.** If a check covers multiple unrelated patterns, split it.
-- **Subagents for application.** Never apply checks in the main context. Each check gets its
-  own subagent with isolated context.
+- **Helper passes for application.** Prefer one isolated helper pass per check so attention stays
+  narrow. If workers are not authorized, keep a local note per check and aggregate afterward.
 - **Checks are pointers, not analyses.** They describe where to look and how to assess, not
-  what the vulnerability is in depth. Use the librarian agent for background.
+  what the vulnerability is in depth. Use the librarian workflow for background.
 - **When in doubt, split.** Two simple checks always beat one complex check.
 - **Checks live in `grimoire/spells/checks/`.** This is part of the spellbook directory
   created by [[summon]].

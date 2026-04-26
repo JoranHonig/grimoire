@@ -2,22 +2,26 @@
 name: librarian-library-search
 description: >-
   Semantic search across the librarian's indexed knowledge bases. This skill
-  is invoked by the librarian agent when it needs to search local libraries
+  is invoked by the librarian workflow when it needs to search local libraries
   by meaning rather than exact text. It runs a vector similarity query against
   the Qdrant database built by librarian-index and returns ranked results with
   source metadata for citation. Not user-invocable — called by the librarian
   agent as part of its research workflow.
-user_invocable: false
 ---
 
 # Librarian Library Search
+
+## Codex Execution Note
+
+Only use Codex workers when the user explicitly asks for delegation or parallel agent work. Otherwise, run the same workflow locally with focused `rg` searches, batched file reads, and concise checkpoints.
+
 
 Perform semantic search across indexed library content via a local Qdrant
 vector database.
 
 ## When to Use
 
-This skill is the librarian agent's primary method for consulting local
+This skill is the librarian workflow's primary method for consulting local
 knowledge bases. Use it **before** falling back to grep-based file search.
 
 Semantic search finds relevant content even when exact keywords don't match —

@@ -6,10 +6,14 @@ description: >-
   in my grimoire", "search sigils", "spellbook stats", or wants information about
   available detection modules. Read-only queries against the personal grimoire
   and project spellbook.
-user_invocable: true
 ---
 
 # Scribe Utilities
+
+## Codex Execution Note
+
+Only use Codex workers when the user explicitly asks for delegation or parallel agent work. Otherwise, run the same workflow locally with focused `rg` searches, batched file reads, and concise checkpoints.
+
 
 Query and explore the contents of the personal grimoire and project spellbook.
 

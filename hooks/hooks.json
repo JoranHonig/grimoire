@@ -5,22 +5,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/init/init-grimoire.sh"
+            "command": "./hooks/init/init-grimoire.sh"
           },
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/init/read-grimoire-md.sh"
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Task",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/sigil-return/triage-sigil.sh"
+            "command": "./hooks/init/read-grimoire-md.sh"
           }
         ]
       }

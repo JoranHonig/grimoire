@@ -6,10 +6,14 @@ description: >-
   detectors", "review my spellbook", "prune sigils", or when duplicate detection
   modules need to be identified and resolved. Scans the personal grimoire or
   project spellbook for overlapping or duplicate sigils and proposes resolutions.
-user_invocable: true
 ---
 
 # Scribe GC
+
+## Codex Execution Note
+
+Only use Codex workers when the user explicitly asks for delegation or parallel agent work. Otherwise, run the same workflow locally with focused `rg` searches, batched file reads, and concise checkpoints.
+
 
 Detect and resolve duplicate or overlapping detection modules in the spellbook.
 

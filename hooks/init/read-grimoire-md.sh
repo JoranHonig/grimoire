@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# read-grimoire-md.sh — If GRIMOIRE.md exists in the project root, inject its
-# contents as additional SessionStart context so Claude has it at session start.
+# read-grimoire-md.sh - If GRIMOIRE.md exists in the project root, inject its
+# contents as additional SessionStart context so Codex has it at session start.
 
 set -euo pipefail
 
-PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$PWD}"
+PROJECT_DIR="${CODEX_PROJECT_DIR:-$PWD}"
 GRIMOIRE_MD="$PROJECT_DIR/GRIMOIRE.md"
 
 if [ ! -f "$GRIMOIRE_MD" ]; then

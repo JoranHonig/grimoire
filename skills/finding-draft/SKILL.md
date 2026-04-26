@@ -6,10 +6,14 @@ description: >-
   "report a vulnerability", "/finding-draft", or wants to construct a new structured
   security finding from a vulnerability observation. This skill is NOT for reviewing
   existing findings (use /finding-review) or deduplicating findings (use /finding-dedup).
-user_invocable: true
 ---
 
 # Finding Draft
+
+## Codex Execution Note
+
+Only use Codex workers when the user explicitly asks for delegation or parallel agent work. Otherwise, run the same workflow locally with focused `rg` searches, batched file reads, and concise checkpoints.
+
 
 Draft structured security findings from vulnerability observations.
 
@@ -49,8 +53,8 @@ Verify the workspace:
 - Check whether `grimoire/findings/` exists. Create it if not.
 
 Gather vulnerability context:
-- If triage context exists from the familiar agent, use it. Otherwise invoke the familiar
-  in finding triage mode (Mode 1) on the vulnerability context. The familiar produces:
+- If triage context exists from the familiar workflow, use it. Otherwise run the familiar
+  checklist in finding triage mode (Mode 1) on the vulnerability context. It produces:
   - an **Impact** statement (use it to calibrate severity — step 3),
   - a **Feasibility** analysis with an attacker class and prerequisite predicate (use it
     to populate the finding's preconditions — step 4),
@@ -105,7 +109,7 @@ should be stated here verbatim.
 
 **## Recommendation** (mandatory) — objective fix direction. Never non-trivial code changes.
 
-**## References** (optional) — numbered citations. Use the librarian agent to discover
+**## References** (optional) — numbered citations. Use the librarian workflow to discover
 relevant references — prior audit findings, specification clauses, and vulnerability
 database entries related to the flaw.
 
@@ -118,7 +122,7 @@ Present the drafted content to the user for review before writing the file.
 
 Determine the target directory:
 - `grimoire/findings/` for manual audit research (default)
-- `grimoire/sigil-findings/` for automated tooling or sigil agents
+- `grimoire/sigil-findings/` for automated tooling or sigil passes
 
 Generate the filename per the filing conventions in the finding skill.
 

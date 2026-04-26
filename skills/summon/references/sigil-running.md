@@ -1,10 +1,10 @@
-# Sigil Spawning Reference
+# Sigil Running Reference
 
-How summon spawns sigil agents to hunt for known vulnerability patterns.
+How summon runs focused sigil passes to hunt for known vulnerability patterns.
 
-## Subagent Prompt Template
+## Helper pass Prompt Template
 
-When spawning a sigil subagent for a check, use this prompt structure:
+When running a sigil helper pass for a check, use this prompt structure:
 
 ```
 You are a sigil — a single-context vulnerability hunter. Your task is to hunt for one
@@ -21,7 +21,8 @@ you are hunting for — what to search for and how to assess matches.
 1. Read GRIMOIRE.md. Note the target's language, architecture, and crown jewels.
 2. Check `grimoire/sigil-findings/` for prior findings on this pattern. Skip if already covered.
 3. Formulate a testable hypothesis from the check's Patterns and Assessment sections.
-4. Search the codebase using Grep, Read, and Glob. Follow the check's search patterns.
+4. Search the codebase using `rg`, file listing, and focused file reads. Follow the check's
+   search patterns.
 5. For each match, assess using the check's Assessment section. Distinguish true positives
    from safe usage.
 6. For confirmed findings, write to `grimoire/sigil-findings/<slug>.md` with:
@@ -41,7 +42,7 @@ you are hunting for — what to search for and how to assess matches.
 
 ## Parallelism
 
-Spawn sigils in batches of 5. Each sigil is a subagent that loads GRIMOIRE.md (~150 lines) plus
+Run sigils in batches of 5. Each sigil is a helper pass that loads GRIMOIRE.md (~150 lines) plus
 one check file (~30 lines) plus codebase reads. Five concurrent sigils is a pragmatic cap that
 balances coverage speed against context budget.
 
@@ -69,19 +70,19 @@ expected. Note in GRIMOIRE.md:
 ## Automation
 
 No spellbook checks available. As findings accumulate during this engagement, use the
-checks skill to codify vulnerability patterns. Re-run sigil spawning after building checks.
+checks skill to codify vulnerability patterns. Re-run sigil running after building checks.
 ```
 
 ## Familiar Integration
 
-After sigil results are collected, route them through the familiar agent for triage:
+After sigil results are collected, route them through the familiar workflow for triage:
 
-1. Sigils spawn as before and write findings to `grimoire/sigil-findings/`
-2. Invoke the familiar agent in batch triage mode (Mode 2) on `grimoire/sigil-findings/`
-3. The familiar independently verifies each finding — confirming, adjusting severity,
+1. Sigils run as before and write findings to `grimoire/sigil-findings/`
+2. Run the familiar workflow in batch triage mode (Mode 2) on `grimoire/sigil-findings/`
+3. The familiar pass independently verifies each finding — confirming, adjusting severity,
    marking uncertain, or dismissing with evidence
 4. Dismissed findings are moved to `grimoire/sigil-findings/dismissed/` for audit trail
 5. Only confirmed and uncertain findings are presented to the user
 
-The sigil spawning, batching, and result collection logic stays the same. The familiar
+The sigil running, batching, and result collection logic stays the same. The familiar
 adds a verification pass between collection and presentation.

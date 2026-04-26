@@ -1,0 +1,47 @@
+{
+  "name": "grimoire",
+  "version": "0.1.0",
+  "description": "Security research toolkit for discovering, proving, and documenting vulnerabilities with Codex.",
+  "author": {
+    "name": "this-vishalsingh",
+    "url": "https://github.com/this-vishalsingh"
+  },
+  "homepage": "https://github.com/this-vishalsingh/grimoire",
+  "repository": "https://github.com/this-vishalsingh/grimoire",
+  "license": "MIT",
+  "keywords": [
+    "security",
+    "audit",
+    "vulnerability-research",
+    "proof-of-concept",
+    "codex",
+    "skills"
+  ],
+  "skills": "./skills/",
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Grimoire",
+    "shortDescription": "Security research workflows for Codex",
+    "longDescription": "Grimoire tunes Codex for security research: codebase cartography, finding drafting and review, proof-of-concept writing, local research libraries, and reusable vulnerability checks.",
+    "developerName": "this-vishalsingh",
+    "category": "Coding",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/this-vishalsingh/grimoire",
+    "privacyPolicyURL": "https://github.com/this-vishalsingh/grimoire",
+    "termsOfServiceURL": "https://github.com/this-vishalsingh/grimoire/blob/master/LICENSE.md",
+    "defaultPrompt": [
+      "Summon Grimoire on this codebase",
+      "Write a safe proof of concept for this finding",
+      "Map the authentication flow for audit context"
+    ],
+    "brandColor": "#5B2C83",
+    "composerIcon": "./grimoire_logo.png",
+    "logo": "./grimoire_logo.png",
+    "screenshots": []
+  }
+}

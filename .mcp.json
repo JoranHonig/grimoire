@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "claudit": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@marchev/claudit@latest"
+      ],
+      "env": {
+        "SOLODIT_API_KEY": "${SOLODIT_API_KEY}"
+      }
+    },
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ],
+      "env": {
+        "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}"
+      }
+    }
+  }
+}
