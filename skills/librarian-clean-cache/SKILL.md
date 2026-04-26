@@ -11,11 +11,6 @@ description: >-
 
 # Librarian Clean Cache
 
-## Codex Execution Note
-
-Only use Codex workers when the user explicitly asks for delegation or parallel agent work. Otherwise, run the same workflow locally with focused `rg` searches, batched file reads, and concise checkpoints.
-
-
 Clear the librarian's local repository cache at `~/.grimoire/librarian/cache/`.
 
 ## Philosophy

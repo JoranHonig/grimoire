@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# init-grimoire.sh - Ensure ~/.grimoire/ has the expected directory structure.
+# init-grimoire.sh — Ensure ~/.grimoire/ has the expected directory structure.
 # Runs on every SessionStart. Idempotent: only creates missing pieces.
 # Exit 0 on success, exit 2 on failure.
 

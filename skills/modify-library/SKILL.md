@@ -16,11 +16,6 @@ description: >-
 
 # Modify Library
 
-## Codex Execution Note
-
-Only use Codex workers when the user explicitly asks for delegation or parallel agent work. Otherwise, run the same workflow locally with focused `rg` searches, batched file reads, and concise checkpoints.
-
-
 Add, remove, or change a library entry in `~/.grimoire/librarian/library/libraries.yaml`.
 
 ## Philosophy

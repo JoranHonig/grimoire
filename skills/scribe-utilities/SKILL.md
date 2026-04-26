@@ -10,11 +10,6 @@ description: >-
 
 # Scribe Utilities
 
-## Codex Execution Note
-
-Only use Codex workers when the user explicitly asks for delegation or parallel agent work. Otherwise, run the same workflow locally with focused `rg` searches, batched file reads, and concise checkpoints.
-
-
 Query and explore the contents of the personal grimoire and project spellbook.
 
 ## Workflow

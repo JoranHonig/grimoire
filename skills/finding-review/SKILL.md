@@ -11,11 +11,6 @@ description: >-
 
 # Finding Review
 
-## Codex Execution Note
-
-Only use Codex workers when the user explicitly asks for delegation or parallel agent work. Otherwise, run the same workflow locally with focused `rg` searches, batched file reads, and concise checkpoints.
-
-
 Review and harden existing security findings against best practices.
 
 ## Prerequisites
@@ -84,16 +79,16 @@ are what the reader uses to decide whether the finding applies to their deployme
 
 **References** — are all cited references real and relevant? Are claims fact-checked?
 
-**Familiar workflow check** — Run the familiar checklist in finding triage mode (Mode 1) on
-the finding being reviewed. It produces a triangulated assessment across
+**Familiar agent check** — Invoke the familiar agent in finding triage mode (Mode 1) on
+the finding being reviewed. The familiar produces a triangulated assessment across
 Impact, Feasibility (with an attacker class and prerequisite predicate), Design Intent,
-and Scope Cross-Reference. Include the verdict (Confirmed, Severity Adjusted,
+and Scope Cross-Reference. Include the familiar's verdict (Confirmed, Severity Adjusted,
 Uncertain, Possibly By Design, or Dismissed) and each of these four sections in the
-review output. Compare the feasibility analysis against the finding's stated
+review output. Compare the familiar's feasibility analysis against the finding's stated
 preconditions — discrepancies are the review's most important signal.
 
-**Librarian workflow check** — Use the librarian workflow to verify cited references exist and
-are accurate. Search for additional relevant references (prior findings
+**Librarian agent check** — Use the librarian agent to verify cited references exist and
+are accurate. Ask the librarian to search for additional relevant references (prior findings
 for similar flaws, specification clauses, security advisories) that could strengthen the
 finding.
 

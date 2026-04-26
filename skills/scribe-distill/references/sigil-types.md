@@ -8,13 +8,13 @@ type.
 ### Check
 
 A markdown file in the checks skill format. Contains grep-able search patterns and
-assessment criteria for an applying pass to follow.
+assessment criteria for an applying agent to follow.
 
 - **Format:** YAML frontmatter + Patterns section + Assessment section
 - **Location:** `grimoire/spells/checks/<slug>.md`
-- **Applied by:** Running a helper pass per check via the checks skill (Mode 2)
+- **Applied by:** Spawning a subagent per check via the checks skill (Mode 2)
 - **Best for:** Patterns identifiable by grep that need context assessment, patterns where
-  the applying pass can follow explicit criteria to determine true vs false positives
+  the applying agent can follow explicit criteria to determine true vs false positives
 - **Reference:** `skills/checks/references/check-format.md`
 
 ### Knowledge Artifact

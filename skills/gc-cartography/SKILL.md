@@ -12,11 +12,6 @@ description: >-
 
 # GC Cartography
 
-## Codex Execution Note
-
-Only use Codex workers when the user explicitly asks for delegation or parallel agent work. Otherwise, run the same workflow locally with focused `rg` searches, batched file reads, and concise checkpoints.
-
-
 Identify overlapping or duplicated cartography files, merge them where appropriate, and clean
 up stale cross-references. Garbage collection for your flow maps.
 

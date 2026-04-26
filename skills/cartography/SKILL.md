@@ -12,11 +12,6 @@ description: >-
 
 # Cartography
 
-## Codex Execution Note
-
-Only use Codex workers when the user explicitly asks for delegation or parallel agent work. Otherwise, run the same workflow locally with focused `rg` searches, batched file reads, and concise checkpoints.
-
-
 Explore a code flow, document which parts of the codebase are relevant, and create a cartography
 file so context can be rebuilt quickly on future visits.
 
@@ -85,30 +80,29 @@ and trace the flow by following the callgraph:
 4. At each hop, note: the file, the symbol, and its role in the flow (one line)
 5. Stop when you reach leaf functions (no further relevant calls), external service boundaries,
    or when the flow loops back to already-visited code
-6. Use helper passes for branches — if the callgraph forks into independent paths (e.g., an async
-   side-effect vs. the main return path), trace each branch as a separate pass; delegate only if
-   explicitly authorized
+6. Use subagents for branches — if the callgraph forks into independent paths (e.g., an async
+   side-effect vs. the main return path), give each branch to a subagent to trace in parallel
 
 Use `path/to/file:symbol` notation to track each hop. This directly becomes the Flow Sequence
 and Key Components in the cartography file.
 
 **Unseeded exploration** — the user describes a flow but doesn't point to specific files (e.g.,
-"map how secrets are retrieved"). Run a broad search fan-out:
+"map how secrets are retrieved"). Deploy a **swarm** of subagents to explore the codebase:
 
 1. Study the user's flow description. Ask clarifying questions if the scope is ambiguous.
 2. Generate search queries — brainstorm function names, module names, class names, route
    patterns, config keys, error messages, log strings, and domain-specific keywords related to
-   the flow. Aim for broad coverage; breadth matters more than precision at this stage.
-3. Run searches in parallel where practical. Each helper pass gets one search query and should:
+   the flow. Aim for **100 subagents** — breadth matters more than precision at this stage.
+3. Spawn all subagents in parallel. Each subagent gets one search query and should:
    - Search for the term across the codebase (file names, symbols, content)
    - For each match, read enough context to assess relevance (a few lines around the match)
    - Return: file path, symbol, one-line relevance assessment, confidence (high/medium/low)
 4. Collect all results. Deduplicate by file. Rank by frequency (files appearing in multiple
-   helper pass results are more likely to be core to the flow) and confidence.
+   subagent results are more likely to be core to the flow) and confidence.
 5. From the top-ranked files, switch to **callgraph-following** (as in seeded mode) to trace the
    actual execution path and build the flow sequence.
 
-The fan-out casts a wide net; the callgraph pass refines it into a coherent flow. Don't skip
+The swarm casts a wide net; the callgraph pass refines it into a coherent flow. Don't skip
 step 5 — a bag of search results is not a flow map.
 
 In both modes, gather:
@@ -118,8 +112,8 @@ In both modes, gather:
 - **Security notes** — trust boundaries, validation gaps, TOCTOU windows, crypto observations,
   anything security-relevant
 
-Use helper passes to partition exploration. Keep the main context focused on assembling the map
-rather than reading every file in detail; use Codex workers only when explicitly authorized.
+Use subagents to parallelize exploration. Keep the main context focused on assembling the map
+rather than reading every file in detail.
 
 Consult `references/cartography-format.md` for the exact format specification and the examples:
 - `examples/cartography-example.md` — single-service flow, one conditional section
@@ -141,7 +135,7 @@ The file must follow the format defined in `references/cartography-format.md`:
 7. **Conditional sections** — for sub-flows that are independently useful but would pollute
    context if always loaded. Use when: the main body exceeds ~80 lines, or a sub-flow is only
    relevant for specific investigations. Write the `<!-- condition: ... -->` comment as a
-   concrete, matchable topic description — a Codex session reads this comment and decides whether to
+   concrete, matchable topic description — an agent reads this comment and decides whether to
    load the section based on the user's current question. **Load** when the user's question
    directly matches the condition topic. **Skip** when the user is focused on the main flow and
    the conditional topic hasn't been mentioned.
@@ -180,7 +174,7 @@ Suggest follow-up actions:
 
 ## Context Rebuild
 
-Cartography files exist so that Codex sessions do not repeat expensive exploration. When a Codex session needs
+Cartography files exist so that agents don't repeat expensive exploration. When an agent needs
 to understand a flow that has already been mapped, it should **rebuild context from the
 cartography file** rather than re-exploring from scratch:
 
@@ -205,8 +199,8 @@ using tokens only on reading source files rather than searching for them.
 
 ## Guidelines
 
-- **Helper passes for exploration.** Use helper passes to search for relevant code. This keeps
-  the main context clean and speeds up discovery.
+- **Subagents for exploration.** Use subagents to search for relevant code in parallel. This
+  keeps the main context clean and speeds up discovery.
 - **Pointers, not content.** Cartography files should never contain code snippets or detailed
   logic explanations. They are navigation maps.
 - **One flow per file.** Don't combine unrelated flows. Use the `related` field and

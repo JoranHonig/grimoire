@@ -136,7 +136,7 @@ Skills with `shallow` status — SKILL.md files are thorough but lack the struct
   - What language domains should be covered (Solidity, Rust, Go, all)?
   - One file per rule, or rules grouped by vulnerability class?
   - What output format when rules produce findings?
-  - How does this integrate with super-sigil running in `agent:sigil`?
+  - How does this integrate with super-sigil spawning in `agent:sigil`?
 
 **`skill:slither`** (sketch)
 - Questions for spec author:

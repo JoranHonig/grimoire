@@ -11,11 +11,6 @@ description: >-
 
 # Finding Dedup
 
-## Codex Execution Note
-
-Only use Codex workers when the user explicitly asks for delegation or parallel agent work. Otherwise, run the same workflow locally with focused `rg` searches, batched file reads, and concise checkpoints.
-
-
 Identify and resolve duplicate or overlapping security findings.
 
 ## Prerequisites
@@ -62,7 +57,7 @@ Classify each pair as:
 - **Distinct** — no meaningful overlap. No action needed.
 
 If the finding set is large (>10 findings), group by `type` first and only compare within
-groups. Use helper passes for parallel comparison if needed.
+groups. Use subagents for parallel comparison if needed.
 
 See `skills/finding/examples/dedup-scenario.md` for a worked example showing duplicate vs
 similar classification and the resolution workflow.

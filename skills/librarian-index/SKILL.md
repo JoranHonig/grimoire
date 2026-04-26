@@ -7,15 +7,10 @@ description: >-
   search", "run librarian-index", or wants to make library content searchable
   via semantic/vector search. Reads all registered libraries from
   libraries.yaml, chunks their files, and stores them in the local Qdrant
-  vector database so the librarian workflow can do semantic search.
+  vector database so the librarian agent can do semantic search.
 ---
 
 # Librarian Index
-
-## Codex Execution Note
-
-Only use Codex workers when the user explicitly asks for delegation or parallel agent work. Otherwise, run the same workflow locally with focused `rg` searches, batched file reads, and concise checkpoints.
-
 
 Build or rebuild the semantic search index over all registered libraries.
 

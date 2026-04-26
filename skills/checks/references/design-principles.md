@@ -1,7 +1,7 @@
 # Check Design Principles
 
 This reference covers the philosophy behind checks: why simplicity matters, how to manage
-Codex attention, and when to split checks.
+agent attention, and when to split checks.
 
 ## The Simplicity Principle
 
@@ -10,26 +10,26 @@ It is enticing to produce super complex checks that find lots of cool bugs. Resi
 It is much more worthwhile having many simple checks that filter out common mistakes and bugs.
 
 - A check that reliably finds one bug class is worth more than one that unreliably finds five.
-- Complex checks exhaust attention and produce uncertain results.
+- Complex checks exhaust agent attention and produce uncertain results.
 - Simple checks compose: run 20 simple checks in parallel, get 20 focused results.
-- Each check is a starting point, not a comprehensive analysis. The focused pass applies the check,
+- Each check is a starting point, not a comprehensive analysis. The agent applies the check,
   produces findings, and those findings get triaged and investigated separately.
 
 ## Attention Management
 
-Context is finite and degrades with length. Every extra line in a check dilutes focus on the
-actual codebase.
+Agent context is finite and degrades with length. Every extra line in a check dilutes the
+agent's focus on the actual codebase.
 
-**Checks should be limited in context.** The pass reading a check should spend most of its
+**Checks should be limited in context.** The agent reading a check should spend most of its
 attention on the codebase, not on understanding the check instructions.
 
 ### Context Isolation
 
-Each check runs in its own helper pass with its own context window. The helper pass receives the
+Each check runs in its own subagent with its own context window. The subagent receives the
 check body and the codebase — nothing else. This isolation is intentional:
 
 - Prevents cross-contamination between checks
-- Keeps each pass focused on one pattern
+- Keeps each agent focused on one pattern
 - Allows parallel execution without interference
 
 Checks cannot depend on each other. If check B needs results from check A, they should be

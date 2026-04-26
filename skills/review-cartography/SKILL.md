@@ -12,11 +12,6 @@ description: >-
 
 # Review Cartography
 
-## Codex Execution Note
-
-Only use Codex workers when the user explicitly asks for delegation or parallel agent work. Otherwise, run the same workflow locally with focused `rg` searches, batched file reads, and concise checkpoints.
-
-
 Verify and refine an existing cartography file against the actual codebase. Fill gaps, fix
 inaccuracies, add cross-references, and introduce conditional sections where needed.
 
@@ -25,7 +20,7 @@ inaccuracies, add cross-references, and introduce conditional sections where nee
 **First drafts are starting points.** A cartography file created during initial exploration
 captures what was found, not everything that exists. Code changes, flows evolve, and initial
 exploration misses things. Review is how cartography files become reliable navigation maps that
-Codex can trust.
+agents can trust.
 
 ## Workflow
 
@@ -34,8 +29,8 @@ in_progress before starting it and completed when done.
 
 ```
 - [ ] 1. Select flow — run index, identify target cartography file
-- [ ] 2. Verify against codebase — run helper passes to check each section independently
-- [ ] 3. Extend missing pieces — add what helper passes found missing
+- [ ] 2. Verify against codebase — spawn subagents to check each section independently
+- [ ] 3. Extend missing pieces — add what subagents found missing
 - [ ] 4. Cross-reference related flows — compare with index, add reciprocal related links
 - [ ] 5. Add conditional sections — separate independent sub-flows if file is too large
 - [ ] 6. Update file and index — write changes, update date, re-run index
@@ -58,34 +53,34 @@ Read the target cartography file in full.
 
 ### 2. Verify Against Codebase
 
-Run helper passes to independently verify each section of the cartography file against the actual
-codebase. Each helper pass should check one area:
+Spawn subagents to independently verify each section of the cartography file against the actual
+codebase. Each subagent should check one area:
 
-**Entry points helper pass:** For each listed entry point, verify:
+**Entry points subagent:** For each listed entry point, verify:
 - Does the file exist?
 - Does the symbol (function/method/handler) exist in that file?
 - Are there other entry points into this flow that were missed?
 
-**Key components helper pass:** For each listed component, verify:
+**Key components subagent:** For each listed component, verify:
 - Does the file exist?
 - Is the one-line role description accurate?
 - Are there other files that participate in this flow but aren't listed?
 
-**Flow sequence helper pass:** Trace the documented sequence through the code:
+**Flow sequence subagent:** Trace the documented sequence through the code:
 - Does execution actually follow the documented order?
 - Are there steps missing between documented steps?
 - Are file references at each step correct?
 
-**Security notes helper pass:** Review the security observations:
+**Security notes subagent:** Review the security observations:
 - Are the noted trust boundaries still accurate?
 - Have any validation gaps been fixed since the file was written?
 - Are there new security-relevant observations to add?
 
-Collect all helper pass results before proceeding.
+Collect all subagent results before proceeding.
 
 ### 3. Extend Missing Pieces
 
-Based on helper pass findings, update the cartography file:
+Based on subagent findings, update the cartography file:
 
 - Add missing entry points, components, or sequence steps
 - Fix incorrect file paths or symbol names
@@ -127,8 +122,8 @@ sub-flows into conditional sections:
 - Move the sub-flow's entry points, components, sequence, and security notes under the
   conditional section
 
-The condition comment should describe when a Codex session should load this section. Be specific
-enough that a Codex session can match it against a user's question.
+The condition comment should describe when an agent should load this section. Be specific
+enough that an agent can match it against a user's question.
 
 If the file is already lean (<80 lines body), skip this step.
 
@@ -161,7 +156,7 @@ Present to the user:
 
 ## Guidelines
 
-- **Independent verification.** Helper passes should check the code themselves, not just validate
+- **Independent verification.** Subagents should check the code themselves, not just validate
   that file paths exist. Read the actual code to confirm role descriptions and flow sequences.
 - **Don't bloat the file.** Review should make the file more accurate, not longer. If adding
   new content pushes the file past ~80 lines, use conditional sections.

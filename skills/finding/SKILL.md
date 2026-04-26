@@ -10,11 +10,6 @@ description: >-
 
 # Finding
 
-## Codex Execution Note
-
-Only use Codex workers when the user explicitly asks for delegation or parallel agent work. Otherwise, run the same workflow locally with focused `rg` searches, batched file reads, and concise checkpoints.
-
-
 Security findings are the core deliverable of security research — structured markdown files
 that prove a vulnerability exists and tell the recipient what to fix.
 
