@@ -8,7 +8,6 @@ description: >-
   cartography file against the actual codebase. It cross-references
   documented flows with real code, fills gaps, fixes stale paths,
   adds related flow links, and introduces conditional sections where needed.
-user_invocable: true
 ---
 
 # Review Cartography

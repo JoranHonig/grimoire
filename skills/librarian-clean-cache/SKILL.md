@@ -7,7 +7,6 @@ description: >-
   "how much space is librarian using", or wants to remove cached repositories
   that the librarian has cloned locally. Clears ~/.grimoire/librarian/cache/ to
   reclaim disk space without touching the curated library/ directory.
-user_invocable: true
 ---
 
 # Librarian Clean Cache

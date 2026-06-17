@@ -7,7 +7,6 @@ description: >-
   findings against best practices for title clarity, description completeness, recommendation
   objectivity, severity accuracy, and reference validity. This skill is NOT for drafting
   new findings (use /finding-draft) or deduplicating findings (use /finding-dedup).
-user_invocable: true
 ---
 
 # Finding Review

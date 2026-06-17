@@ -8,7 +8,6 @@ description: >-
   or wants to identify and merge overlapping cartography files, remove
   stale references, and reduce duplication in the grimoire/cartography/
   directory.
-user_invocable: true
 ---
 
 # GC Cartography

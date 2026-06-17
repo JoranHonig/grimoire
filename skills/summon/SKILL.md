@@ -9,7 +9,6 @@ description: >-
   It builds initial context, creates the audit workspace structure, and produces
   GRIMOIRE.md — the living contextual map that primes all future agent
   interactions for security research.
-user_invocable: true
 ---
 
 # Summon

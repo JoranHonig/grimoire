@@ -8,7 +8,6 @@ description: >-
   a confirmed finding should be transformed into a reusable automated detection
   module. Analyzes a finding's vulnerability pattern, assesses automation
   feasibility, and creates a detection module (sigil) in the project spellbook.
-user_invocable: true
 ---
 
 # Scribe Distill

@@ -9,7 +9,6 @@ description: >-
   scattered throughout a codebase. This skill is for annotation discovery only —
   how annotations are used downstream (spawning subagents, cross-referencing
   findings, etc.) is out of scope.
-user_invocable: true
 ---
 
 # Annotation

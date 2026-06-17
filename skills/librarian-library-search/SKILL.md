@@ -7,7 +7,6 @@ description: >-
   the Qdrant database built by librarian-index and returns ranked results with
   source metadata for citation. Not user-invocable — called by the librarian
   agent as part of its research workflow.
-user_invocable: false
 ---
 
 # Librarian Library Search

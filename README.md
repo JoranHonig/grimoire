@@ -6,12 +6,12 @@
 
 <p align="center">
   <strong>A security research toolkit that learns.</strong><br/>
-    Grimoire takes the raw agent experience and tunes it for security research. Clean, readable and reproducible PoCs, 
-    automatic static analysis module distillation, and more. 
+    Grimoire takes the raw agent experience and tunes it for security research. Clean, readable and reproducible PoCs,
+    automatic static analysis module distillation, and more.
 </p>
 
 <p align="center">
-  <a href="#installation"><img src="https://img.shields.io/badge/Claude_Code-Plugin-8B5CF6?style=flat-square" alt="Claude Code Plugin" /></a>
+  <a href="#installation"><img src="https://img.shields.io/badge/Codex-Plugin-8B5CF6?style=flat-square" alt="Codex Plugin" /></a>
   <img src="https://img.shields.io/badge/version-0.1.0-blue?style=flat-square" alt="Version 0.1.0" />
   <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License MIT" />
 </p>
@@ -20,57 +20,86 @@
 
 ## Why Grimoire?
 
-There are many audit agents and vulnerability discovery skills. 
+There are many audit agents and vulnerability discovery skills.
 
-These are great, but the real power of agents is in amplifying operator skill. Grimoire embraces that philosophy and implements 
-several skills that make your agent a better co-auditor. 
+These are great, but the real power of agents is in amplifying operator skill. Grimoire embraces that philosophy and implements
+several skills that make your agent a better co-auditor.
 
-Some skills (such as the cartography) skill come with a small workflow adaption. However, most features such as the *librarian* 
-are designed to just *work* within whatever workflow you follow. 
+Some skills (such as the cartography) skill come with a small workflow adaption. However, most features such as the *librarian*
+are designed to just *work* within whatever workflow you follow.
 
-> The *librarian* is an agent that looks for documentation and references (e.g. previous audit findings, docs, blog posts, etc.) . It is very focussed on providing only information backed up by reference and keeps the main context clear from large mcp descriptions. 
-> 
-> The *cartography* skill provides instructions to claude on how it can document a mapping from features / flows to code locations. This allows you to say `hey load context on the authentication flow`, claude will review the file and very quickly load the relevant context.
+> The *librarian* is an agent that looks for documentation and references (e.g. previous audit findings, docs, blog posts, etc.) . It is very focussed on providing only information backed up by reference and keeps the main context clear from large mcp descriptions.
+>
+> The *cartography* skill provides instructions to Codex on how it can document a mapping from features / flows to code locations. This allows you to say `hey load context on the authentication flow`, Codex will review the file and very quickly load the relevant context.
 
 ### Philosophy
 
 Grimoire is built on a few hard convictions from real-world security research:
 
-- **Leverage over automation.** Grimoire provides skills that amplify operator skill, though some automation is present this is just to give you space for more research.
-- **Ergonomics** Agents are already quite useful, Grimoire provides skills (e.g. cartography) that fine tune agent behaviour to be more adjusted to auditing workflows.
-- **Not getting in your way** Grimoire takes the base agent experience and makes it more useful for auditing wihout getting in your way.
+- **Leverage over automation.** Grimoire provides skills that amplify operator skill, though some automation is present to give you more room for research.
+- **Ergonomics.** Agents are already quite useful, and Grimoire adds skills like cartography that fit security-review workflows better.
+- **Not getting in your way.** Grimoire takes the base agent experience and makes it more useful for auditing without getting in your way.
 
-### Alpha 
+### Alpha
 
-Grimoire is still at a very early stage and under continuous development expect there to be major changes.
+Grimoire is still at a very early stage and under continuous development, so expect major changes.
 
 ## Getting Started
 
-Grimore is set up as a claude plugin that's easy to set up. 
-
-At first you should just use the summon command and get going, grimoire will automatically hop in once you ask 
-claude to write a finding, proof of concept, or a similar task.
-
-Once you're ready to dive deep we would suggest having a look at the scribe and cartography skills. 
-
-* **scribe** - automatically analyzes your findings and build detection modules for them (which are automatically ran in your next audit)
-* **cartography** - super useful for large codebases. The cartography skill has claude memorize where to find the context related to different flows/ features. That makes it super easy to load different contexts.
+Yes, you can use Grimoire as part of a normal Codex security workflow. The shortest loop is:
+`summon` for context, `cartography` for flow mapping, `librarian` for outside research,
+`finding-draft` and `finding-review` for capture, `write-poc` for reproduction, and `scribe`
+for reusable checks.
 
 ### Installation
 
+This fork is Codex-native: the manifest lives at `.codex-plugin/plugin.json`, optional MCP
+servers live in `.mcp.json`, slash-command workflows live in `commands/`, and skills live
+under `skills/`.
+
+Clone this fork into your local plugin directory, or symlink this checkout there:
+
 ```bash
-git clone https://github.com/JoranHonig/grimoire.git
-claude --plugin-dir /path/to/grimoire
+git clone https://github.com/this-vishalsingh/grimoire.git ~/plugins/grimoire
 ```
 
-Skills and agents auto-discover via the plugin manifest. Some features require API keys:
+Codex discovers plugins through a marketplace file. For a user-local install, make sure this
+repository is available at `~/plugins/grimoire`, then add this entry to
+`~/.agents/plugins/marketplace.json`:
+
+```json
+{
+  "name": "local",
+  "interface": {
+    "displayName": "Local Plugins"
+  },
+  "plugins": [
+    {
+      "name": "grimoire",
+      "source": {
+        "source": "local",
+        "path": "./plugins/grimoire"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Coding"
+    }
+  ]
+}
+```
+
+Skills and hooks are wired through the Codex plugin manifest. Commands and role prompts are
+included in the conventional `commands/` and `agents/` directories, with thin skill wrappers for
+the named Grimoire roles. Some features require API keys:
 
 | Service | Key | Purpose |
 |---------|-----|---------|
 | [Solodit](https://solodit.xyz) | `SOLODIT_API_KEY` | Audit findings search via claudit |
 | [Context7](https://context7.com/dashboard) | `CONTEXT7_API_KEY` | Library documentation lookups |
 
-Set these in your Claude Code settings (`~/.claude/settings.json`):
+Set these in your Codex environment or settings:
 
 ```json
 {
@@ -81,24 +110,39 @@ Set these in your Claude Code settings (`~/.claude/settings.json`):
 }
 ```
 
-Both are optional — the librarian will fall back to web search if they are not set. You can also export them as regular shell environment variables (e.g. in `~/.zshrc`) instead of using `settings.json`.
+Both are optional - the librarian will fall back to web search if they are not set. You can also export them as regular shell environment variables (for example in `~/.zshrc`) instead of using `settings.json`.
 
-### Summon
+### Workflow
 
-Start any engagement with `summon`:
+Use Grimoire like this in practice:
 
-```
+1. Start with `summon`.
+2. Use `cartography` to map code paths and `librarian` to research outside sources.
+3. Turn confirmed issues into artifacts with `finding-draft` and `finding-review`.
+4. Reproduce with `write-poc`.
+5. Distill repeatable defenses with `scribe`.
+6. When improving Grimoire itself, use `gap-analysis`, `execute-plan`, and `assess-process-improvements`.
+
+Example session:
+
+```text
 You:      "Summon grimoire on this codebase"
 Grimoire: → Analyzes project structure, architecture, integrations
           → Identifies crown jewels and attack surface
           → Writes GRIMOIRE.md contextual map
-          → Spawns detection checks across the codebase
-          → Surfaces initial findings for triage
+          → Surfaces first targets for research
+
+You:      "Map the authentication flow"
+You:      "Look up prior audit findings for ERC-4626 inflation attacks"
+You:      "Document this as a finding"
+You:      "Review my findings before submission"
+You:      "Write a PoC for the reentrancy I found"
+You:      "Distill this finding into a check"
 ```
 
-Then work naturally — Grimoire's skills trigger from context:
+If you just want the quick routing map, these are the common phrases:
 
-```
+```text
 "Map the authentication flow"              → cartography
 "Write a PoC for the reentrancy I found"   → write-poc
 "Document this as a finding"               → finding-draft
@@ -119,6 +163,9 @@ grimoire/                     # Human-written specs (read-only, source of truth)
 └── ideas/                    # Roadmap and research notes
 skills/                       # Implemented skills (where development happens)
 agents/                       # Implemented agents
+commands/                     # Codex slash-command workflows
+.codex-plugin/plugin.json     # Codex plugin manifest
+.mcp.json                     # Optional MCP server definitions
 ```
 
 Specs and implementation are strictly separated. The `grimoire/` directory is the source of truth — never modified during development. Skills in `skills/` implement those specs.

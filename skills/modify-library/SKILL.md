@@ -12,7 +12,6 @@ description: >-
   libraries the librarian has access to. Modifies
   ~/.grimoire/librarian/library/libraries.yaml to add, remove, or update
   library entries. Supports git repositories and local symlink directories.
-user_invocable: true
 ---
 
 # Modify Library

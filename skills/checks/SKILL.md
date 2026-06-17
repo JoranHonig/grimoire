@@ -8,7 +8,6 @@ description: >-
   Checks are the simplest unit of agentic vulnerability detection — markdown files
   describing what to look for and how to assess matches. This skill is NOT for
   general code review or ad-hoc vulnerability analysis.
-user_invocable: true
 ---
 
 # Checks

@@ -6,7 +6,6 @@ description: >-
   in my grimoire", "search sigils", "spellbook stats", or wants information about
   available detection modules. Read-only queries against the personal grimoire
   and project spellbook.
-user_invocable: true
 ---
 
 # Scribe Utilities

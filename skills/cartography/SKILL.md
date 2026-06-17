@@ -8,7 +8,6 @@ description: >-
   code flow works so that context can be quickly rebuilt on future visits.
   This is the primary skill for creating cartography files in
   grimoire/cartography/.
-user_invocable: true
 ---
 
 # Cartography
